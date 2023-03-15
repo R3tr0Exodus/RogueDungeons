@@ -32,7 +32,7 @@ class Entity(GameObject):
     sprite: pygame.Surface = None
     rect: pygame.Rect = None
 
-    def super__init__(self, baseHealth, baseDmg, rect, spritePath: str="/sprites/Jerry_sprite",):
+    def __init__(self, baseHealth, baseDmg, rect, spritePath: str="../sprites/Jerry_sprite.png",):
         self.health = baseHealth
         self.baseHealth = baseHealth
         self.dmg = baseDmg
