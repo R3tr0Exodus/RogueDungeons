@@ -20,7 +20,7 @@ class WindowRenderer:
         pygame.display.flip()
         self.clear()
 
-    def add_to_surface(self, img: pygame.Surface, rect: pygame.Rect=None):
+    def draw_game_object(self, img: pygame.Surface, rect: pygame.Rect=None):
         if rect is None:
             self.__screen.blit(img, img.get_rect())
         else:
