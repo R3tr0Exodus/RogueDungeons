@@ -1,7 +1,7 @@
 import pygame
 
 
-class GameObject:
+class GameObject(object):
     sprite: pygame.Surface = None
     rect: pygame.Rect
 
@@ -68,4 +68,11 @@ class Player(Entity):
 
 
 class UiButton(GameObject):
-    pass
+    buttonFunc = None
+
+    def __init__(self, buttonFunc, rect, sprite=None):
+        super().__init__(rect, sprite)
+        self.buttonFunc = buttonFunc
+
+    def on_press(self):
+        self.buttonFunc()
