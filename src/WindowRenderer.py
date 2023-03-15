@@ -1,4 +1,5 @@
 import pygame
+from GameObject import GameObject
 
 
 class WindowRenderer:

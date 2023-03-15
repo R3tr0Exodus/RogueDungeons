@@ -39,6 +39,7 @@ class Entity(GameObject):
         self.baseDmg = baseDmg
         self.rect = rect
         self.sprite = pygame.image.load(spritePath)
+        self.sprite = pygame.transform.scale(self.sprite, (rect[2], rect[3]))
 
     def take_damage(self, damage):
         self.health -= damage
