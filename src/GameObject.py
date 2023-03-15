@@ -2,11 +2,12 @@ import pygame
 
 
 class GameObject(object):
-    sprite: pygame.Surface = None
+    sprite: pygame.Surface
     rect: pygame.Rect
 
-    def __init__(self, rect, spritePath=None):
+    def __init__(self, rect: pygame.Rect, spritePath="../sprites/Error_Placeholder.png"):
         self.sprite = pygame.image.load(spritePath)
+        self.sprite = pygame.transform.scale(self.sprite, (rect.width, rect.height))
         self.rect = rect
 
     def update(self):
@@ -67,7 +68,11 @@ class UiButton(GameObject):
     buttonFunc = None
 
     def __init__(self, buttonFunc, rect, sprite=None):
-        super().__init__(rect, sprite)
+        if sprite is None:
+            super().__init__(rect)
+        else:
+            super().__init__(rect, sprite)
+
         self.buttonFunc = buttonFunc
 
     def on_press(self):
