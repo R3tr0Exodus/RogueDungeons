@@ -5,8 +5,8 @@ class GameObject(object):
     sprite: pygame.Surface = None
     rect: pygame.Rect
 
-    def __init__(self, rect, sprite=None):
-        self.sprite = sprite
+    def __init__(self, rect, spritePath=None):
+        self.sprite = pygame.image.load(spritePath)
         self.rect = rect
 
     def update(self):
@@ -32,14 +32,10 @@ class Entity(GameObject):
     sprite: pygame.Surface = None
     rect: pygame.Rect = None
 
-    def __init__(self, baseHealth, baseDmg, rect, spritePath: str="../sprites/Jerry_sprite.png",):
-        self.health = baseHealth
-        self.baseHealth = baseHealth
-        self.dmg = baseDmg
-        self.baseDmg = baseDmg
-        self.rect = rect
-        self.sprite = pygame.image.load(spritePath)
-        self.sprite = pygame.transform.scale(self.sprite, (rect[2], rect[3]))
+    def __init__(self, baseHealth, baseDmg, rect, spritePath="../sprites/Jerry_sprite.png"):
+        super().__init__(rect, spritePath)
+        self.health = self.baseHealth = baseHealth
+        self.dmg = self.baseDmg = baseDmg
 
     def take_damage(self, damage):
         self.health -= damage
