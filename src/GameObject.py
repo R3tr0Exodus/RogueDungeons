@@ -9,6 +9,16 @@ class GameObject(object):
         self.sprite = pygame.image.load(spritePath)
         self.sprite = pygame.transform.scale(self.sprite, (rect.width, rect.height))
         self.rect = rect
+<<<<<<< Updated upstream
+=======
+        self.layer = layer
+
+        GameObject.instancelist.append(self)
+        GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer)
+
+    def __del__(self):
+        GameObject.instancelist.remove(self)
+>>>>>>> Stashed changes
 
     def update(self):
         pass
