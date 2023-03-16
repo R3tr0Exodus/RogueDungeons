@@ -4,7 +4,8 @@ from WindowRenderer import WindowRenderer
 import GameObject
 from Utility import check_button_press
 
-def testFunc():
+
+def test_func():
     print('This was printed from a test')
 
 
@@ -13,7 +14,7 @@ if __name__ == "__main__":
     window.set_background_color(255, 0, 255)
 
     Jeffrey = GameObject.Player(50, 0, pygame.Rect(50, 50, 500, 500))
-    testButton = GameObject.UiButton(testFunc, pygame.Rect(500, 200, 250, 50))
+    testButton = GameObject.UiButton(test_func, pygame.Rect(500, 200, 250, 50))
 
     running = True
     while running:
