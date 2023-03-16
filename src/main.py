@@ -1,25 +1,41 @@
 
 import pygame
-import GameObject
+import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press
+from Utility import check_button_press, Layers, update_gameobjects
 
 
-def test_func():
-    print('This was printed from a test')
+def open_inv():
+    print('opened inventory')
+
+
+def start_attack():
+    print('ATTAAACK')
+
+
+def continue_dungeon():
+    print('continued in dungeon')
+
+
+def use_item():
+    print('used item')
 
 
 if __name__ == "__main__":
     window = WindowRenderer(50, 50)
     window.set_background_color(255, 0, 255)
 
-    Jeffrey = GameObject.Player(50, 0, pygame.Rect(50, 50, 500, 500))
-    testButton = GameObject.UiButton(test_func, pygame.Rect(500, 200, 250, 50))
+    # Entities
+    Jeffrey = Objects.Player(50, 0, pygame.Rect(425, 455, 100, 100), Layers.ENTITIES)
+
+    # Buttons
+    invButton = Objects.UiButton(open_inv, pygame.Rect(700, 550, 100, 100), Layers.UI),
+    attButton = Objects.UiButton(start_attack, pygame.Rect(125, 550, 450, 100), Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, pygame.Rect(425, 20, 150, 50), Layers.UI)
 
     running = True
     while running:
-        window.draw_game_object(Jeffrey.sprite, Jeffrey.rect)
-        window.draw_game_object(testButton.sprite, testButton.rect)
+        update_gameobjects(window)
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event
@@ -35,7 +51,10 @@ if __name__ == "__main__":
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    check_button_press(buttons=[testButton], mousePos=pygame.mouse.get_pos())
+                    buttons = [obj for obj in Objects.GameObject.instancelist
+                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+
+                    check_button_press(buttons, pygame.mouse.get_pos())
 
 
 pygame.quit()
