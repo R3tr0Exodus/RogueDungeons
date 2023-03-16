@@ -21,7 +21,7 @@ class WindowRenderer:
         self.clear()
 
     def draw_gameobject(self, gameObj: GameObject):
-        self.__screen.blit(gameObj.sprite, gameObj.sprite.get_rect())
+        self.__screen.blit(gameObj.sprite, gameObj.rect)
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)

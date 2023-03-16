@@ -1,10 +1,10 @@
 import pygame
-import GameObject
+import GameObject as Objects
 import WindowRenderer as WR
 from enum import Enum
 
 
-class Layers(Enum):
+class Layers:
     UI = 0
     VFX = 1
     ENTITIES = 2
@@ -13,14 +13,13 @@ class Layers(Enum):
     BACKGROUND = 5
 
 
-def check_button_press(buttons: list[GameObject.UiButton], mousePos):
+def check_button_press(buttons: list[Objects.UiButton], mousePos):
     for button in buttons:
         if button.rect.collidepoint(mousePos):
             button.on_press()
 
 
-def update_gameobjects(gameobjects: list[GameObject.GameObject], window: WR.WindowRenderer):
-    gameobjects.sort(key=lambda x: x.layer)
-    for gameObj in gameobjects:
-        gameObj.update()
-        window.draw_gameobject(gameObj)
+def update_gameobjects(window: WR.WindowRenderer):
+    for obj in Objects.GameObject.instancelist:
+        obj.update()
+        window.draw_gameobject(obj)
