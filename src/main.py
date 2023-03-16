@@ -1,7 +1,7 @@
 
 import pygame
-from WindowRenderer import WindowRenderer
 import GameObject
+from WindowRenderer import WindowRenderer
 from Utility import check_button_press
 
 def testFunc():
