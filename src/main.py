@@ -14,12 +14,19 @@ if __name__ == "__main__":
     window.set_background_color(255, 0, 255)
 
     Jeffrey = GameObject.Player(50, 0, pygame.Rect(50, 50, 500, 500))
-    testButton = GameObject.UiButton(test_func, pygame.Rect(500, 200, 250, 50))
+
+    # Create UI buttons
+    buttons = {
+        'InvButton': GameObject.UiButton(test_func, pygame.Rect(750, 550, 100, 100)),
+        'AttackButton': GameObject.UiButton(test_func(), pygame.Rect(200, 550, 450, 100))
+
+    }
 
     running = True
     while running:
         window.draw_game_object(Jeffrey.sprite, Jeffrey.rect)
-        window.draw_game_object(testButton.sprite, testButton.rect)
+        window.draw_game_object(buttons['InvButton'].sprite, buttons['InvButton'].rect)
+        window.draw_game_object(buttons['AttackButton'].sprite, buttons['AttackButton'].rect)
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event
@@ -35,7 +42,7 @@ if __name__ == "__main__":
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    check_button_press(buttons=[testButton], mousePos=pygame.mouse.get_pos())
+                    check_button_press(buttons, mousePos=pygame.mouse.get_pos())
 
 
 pygame.quit()
