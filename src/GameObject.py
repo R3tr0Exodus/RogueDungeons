@@ -65,7 +65,7 @@ class Player(Entity):
 
 
 class UiButton(GameObject):
-    buttonFunc = None
+    __buttonFunc = None
 
     def __init__(self, buttonFunc, rect, sprite=None):
         if sprite is None:
@@ -73,7 +73,7 @@ class UiButton(GameObject):
         else:
             super().__init__(rect, sprite)
 
-        self.buttonFunc = buttonFunc
+        self.__buttonFunc = buttonFunc
 
     def on_press(self):
-        self.buttonFunc()
+        self.__buttonFunc()
