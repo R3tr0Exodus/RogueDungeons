@@ -20,11 +20,8 @@ class WindowRenderer:
         pygame.display.flip()
         self.clear()
 
-    def draw_game_object(self, img: pygame.Surface, rect: pygame.Rect=None):
-        if rect is None:
-            self.__screen.blit(img, img.get_rect())
-        else:
-            self.__screen.blit(img, rect)
+    def draw_gameobject(self, gameObj: GameObject):
+        self.__screen.blit(gameObj.sprite, gameObj.sprite.get_rect())
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
