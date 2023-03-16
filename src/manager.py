@@ -1,10 +1,11 @@
-import GameObject
+import GameObject as Objects
 
 
 class Room:
-    enemies: list[GameObject.Entity] = None
-    hasTreasure: bool = False
-    loot: list[GameObject.Item] = []
+    def __init__(self):
+        self.enemies: list[Objects.Entity] = None
+        self.hasTreasure: bool = False
+        self.loot: list[Objects.Item] = []
 
 
 class DungeonManager:
@@ -21,10 +22,8 @@ class DungeonManager:
 
 class TurnManager:
     turnIndex: int = 0
-    player: GameObject.Player = None
-    enemies: list[GameObject.Entity] = None
 
-    def __init__(self, player: GameObject.Player, enemy_list: list[GameObject.Entity]):
+    def __init__(self, player: Objects.Player, enemy_list: list[Objects.Entity]):
         self.player = player
         self.enemies = enemy_list
 
