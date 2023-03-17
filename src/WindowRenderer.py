@@ -3,12 +3,12 @@ from GameObject import GameObject
 
 
 class WindowRenderer:
-    def __init__(self, x, y, width=1024, height=768):
+    def __init__(self, x, y, flags, width=1024, height=768):
         self.__x = x
         self.__y = y
         self.__w = width
         self.__h = height
-        self.__screen = pygame.display.set_mode((self.__w, self.__h))
+        self.__screen = pygame.display.set_mode((self.__w, self.__h), flags=flags)
         self.__backgroundColor = (255, 255, 255)
 
         self.__screen.fill(self.__backgroundColor)

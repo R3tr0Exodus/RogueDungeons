@@ -22,7 +22,8 @@ def use_item():
 
 
 if __name__ == "__main__":
-    window = WindowRenderer(50, 50)
+    pygame.init()
+    window = WindowRenderer(50, 50, (pygame.FULLSCREEN | pygame.SHOWN))
     window.set_background_color(255, 0, 255)
 
     # Entities
@@ -42,19 +43,16 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN:
-                match event:
-                    case pygame.K_ESCAPE:
-                        running = False
-
-                    # Add more buttons later, perhaps shortcuts?
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     buttons = [obj for obj in Objects.GameObject.instancelist
                                if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
 
                     check_button_press(buttons, pygame.mouse.get_pos())
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            running = False
 
 
 pygame.quit()
