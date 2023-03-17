@@ -25,8 +25,8 @@ class TurnManager:
     turnIndex: int = 0
     player: GameObject.Player = None
     enemies: list[GameObject.Entity] = None
-    __fullHeartSprite = pygame.image.load("../sprites/Heart_sprite.png")
-    __emptyHeartSprite = pygame.image.load("../sprites/EmptyHeart_sprite.png")
+    __healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
+    __pixelSize: int = 7
 
     __screen: WindowRenderer = None
 
@@ -35,11 +35,18 @@ class TurnManager:
         self.enemies = enemy_list
         self.__screen = screen
 
+        self.__healthBarSprite = pygame.transform.scale(self.__healthBarSprite,
+                                                        (50 * self.__pixelSize, 4 * self.__pixelSize))
+
     def next_turn(self):
         self.turnIndex += 1
 
-    def draw_hp(self):
-        for i in range(self.player.health):
-            self.__screen.draw_game_object(self.__fullHeartSprite, pygame.Rect(50 * i, 50, 50, 50))
+    def draw_hp(self, player: GameObject.Player, enemy: GameObject.Entity):
+        self.__screen.draw_game_object(self.__healthBarSprite, pygame.Rect(600, 50, 50, 50))
+        self.__screen.draw_rect((255, 0, 0), pygame.Rect(600 + self.__pixelSize, 50 + self.__pixelSize,
+                                                         player.health * self.__pixelSize, 2 * self.__pixelSize))
+        self.__screen.draw_game_object(self.__healthBarSprite, pygame.Rect(50, 500, 50, 50))
+        self.__screen.draw_rect((255, 0, 0), pygame.Rect(50 + self.__pixelSize, 500 + self.__pixelSize,
+                                                         enemy.health * self.__pixelSize, 2 * self.__pixelSize))
 
 

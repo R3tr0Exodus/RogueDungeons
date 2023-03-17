@@ -26,6 +26,9 @@ class WindowRenderer:
         else:
             self.__screen.blit(img, rect)
 
+    def draw_rect(self, color: tuple, rect: pygame.rect):
+        pygame.draw.rect(self.__screen, color, rect)
+
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
 
