@@ -3,17 +3,15 @@ from GameObject import GameObject
 
 
 class WindowRenderer:
-    __x = __y = 0
-    __w = __h = 0
+    w: int = None
+    h: int = None
     __screen = None
     __backgroundColor = (255, 255, 255)
 
-    def __init__(self, x, y, width=1024, height=768):
-        self.__x = x
-        self.__y = y
-        self.__w = width
-        self.__h = height
-        self.__screen = pygame.display.set_mode((self.__w, self.__h))
+    def __init__(self, width=1024, height=763):
+        self.w = width
+        self.h = height
+        self.__screen = pygame.display.set_mode((self.w, self.h))
         self.__screen.fill(self.__backgroundColor)
 
     def update(self):
