@@ -3,15 +3,11 @@ from GameObject import GameObject
 
 
 class WindowRenderer:
-    def __init__(self, x, y, width=1024, height=768):
-        self.__x = x
-        self.__y = y
-        self.__w = width
-        self.__h = height
-        self.__screen = pygame.display.set_mode((self.__w, self.__h))
+    def __init__(self, width=1024, height=768):
+        self.w = width
+        self.h = height
+        self.__screen = pygame.display.set_mode((self.w, self.h))
         self.__backgroundColor = (255, 255, 255)
-
-        self.__screen.fill(self.__backgroundColor)
 
     def update(self):
         pygame.display.flip()
@@ -19,6 +15,9 @@ class WindowRenderer:
 
     def draw_gameobject(self, gameObj: GameObject):
         self.__screen.blit(gameObj.sprite, gameObj.rect)
+
+    def draw_rect(self, color: tuple, rect: pygame.rect):
+        pygame.draw.rect(self.__screen, color, rect)
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
