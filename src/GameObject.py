@@ -1,14 +1,27 @@
 import pygame
+from enum import Enum
 
 
 class GameObject(object):
+    # Static variables
+    instancelist = []  # keep track of all gameobjects
+
+    # Instance variables
     sprite: pygame.Surface
     rect: pygame.Rect
+    layer: int = 0
 
-    def __init__(self, rect: pygame.Rect, spritePath="../sprites/Error_Placeholder.png"):
+    def __init__(self, rect: pygame.Rect, layer: int, spritePath="../sprites/Error_Placeholder.png"):
         self.sprite = pygame.image.load(spritePath)
         self.sprite = pygame.transform.scale(self.sprite, (rect.width, rect.height))
         self.rect = rect
+        self.layer = layer
+
+        GameObject.instancelist.append(self)
+        GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
+
+    def __del__(self):
+        GameObject.instancelist.remove(self)
 
     def update(self):
         pass
@@ -26,15 +39,8 @@ class Buff(GameObject):
 
 
 class Entity(GameObject):
-    health: int = 0
-    baseHealth: int = 0
-    dmg: int = 0
-    baseDmg: int = 0
-    sprite: pygame.Surface = None
-    rect: pygame.Rect = None
-
-    def __init__(self, baseHealth, baseDmg, rect, spritePath="../sprites/Jerry_sprite.png"):
-        super().__init__(rect, spritePath)
+    def __init__(self, baseHealth, baseDmg, rect, layer: int, spritePath="../sprites/Jerry_sprite.png"):
+        super().__init__(rect, layer, spritePath)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
 
@@ -48,13 +54,16 @@ class Entity(GameObject):
 
 
 class Player(Entity):
-    __inventory: list = []
-    attackItem: Item = None
-    defensiveItem: Item = None
-    attackBuffs: Buff = []
-    defensiveBuffs: Buff = []
+    def __init__(self, baseHealth, baseDmg, rect, layer: int, spritePath="../sprites/Jerry_sprite.png"):
+        super().__init__(baseHealth, baseDmg, rect, layer, spritePath)
 
-    def get_inventory(self) -> list:
+        self.__inventory: list[Item] = []
+        self.attackItem: Item
+        self.defensiveItem: Item
+        self.attackBuffs: list[Buff]
+        self.defensiveBuffs: list[Buff]
+
+    def get_inventory(self):
         return self.__inventory
 
     def add_inventory(self, item: Item):
@@ -65,13 +74,12 @@ class Player(Entity):
 
 
 class UiButton(GameObject):
-    __buttonFunc = None
 
-    def __init__(self, buttonFunc, rect, sprite=None):
+    def __init__(self, buttonFunc, rect, layer: int, sprite=None):
         if sprite is None:
-            super().__init__(rect)
+            super().__init__(rect, layer)
         else:
-            super().__init__(rect, sprite)
+            super().__init__(rect, layer, sprite)
 
         self.__buttonFunc = buttonFunc
 
