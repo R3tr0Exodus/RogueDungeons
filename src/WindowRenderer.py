@@ -1,5 +1,5 @@
 import pygame
-from math import floor
+from math import ceil
 from GameObject import GameObject
 
 
@@ -23,10 +23,6 @@ class WindowRenderer:
             self.h = h
             self.__screen = screen
 
-            self.blocksX = floor(self.w / 100)
-            self.blocksY = floor(self.h / 100)
-            print(f'blocksX: {self.blocksX} | blocksY: {self.blocksY}')
-
         def gameobject(self, gameObj: GameObject):
             self.__screen.blit(gameObj.sprite, gameObj.rect)
 
@@ -36,12 +32,19 @@ class WindowRenderer:
         def sprite(self, sprite: pygame.surface, rect: pygame.rect):
             self.__screen.blit(sprite, rect)
 
-        def background(self, spritePath: str):
+        def background(self, spritePath: str, scale):
             sprite = pygame.image.load(spritePath)
+            sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * scale, sprite.get_rect().height * scale))
 
-            for i in range(0, self.blocksX):
-                for j in range(0, self.blocksY):
-                    self.__screen.blit(sprite, pygame.Rect(i * 100, j * 100, 100, 100))
+            spriteSize = sprite.get_rect()
+            blocksX = ceil(self.w / spriteSize.w)
+            blocksY = ceil(self.h / spriteSize.h)
+
+            for i in range(0, blocksX):
+                sprite = pygame.transform.flip(sprite, False, True)
+                for j in range(0, blocksY):
+                    sprite = pygame.transform.flip(sprite, True, False)
+                    self.__screen.blit(sprite, (i * spriteSize.w, j * spriteSize.h, spriteSize.w, spriteSize.h))
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
