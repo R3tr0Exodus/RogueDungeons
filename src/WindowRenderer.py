@@ -3,10 +3,10 @@ from GameObject import GameObject
 
 
 class WindowRenderer:
-    def __init__(self, width=1024, height=768):
+    def __init__(self, flags, width=1920, height=1080):
         self.w = width
         self.h = height
-        self.__screen = pygame.display.set_mode((self.w, self.h))
+        self.__screen = pygame.display.set_mode((self.w, self.h), flags=flags)
         self.__backgroundColor = (255, 255, 255)
 
         # Reference to inner class
@@ -34,3 +34,6 @@ class WindowRenderer:
 
     def clear(self):
         self.__screen.fill(self.__backgroundColor)
+
+    def get_center(self):
+        return self.__screen.get_rect().center
