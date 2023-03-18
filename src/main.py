@@ -35,7 +35,6 @@ if __name__ == "__main__":
     # Managers
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
-
     # Buttons
     invButton = Objects.UiButton(open_inv, pygame.Rect(700, 550, 100, 100), Layers.UI),
     attButton = Objects.UiButton(start_attack, pygame.Rect(125, 550, 450, 100), Layers.UI)
@@ -61,6 +60,5 @@ if __name__ == "__main__":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
-
 
 pygame.quit()
