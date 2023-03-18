@@ -6,7 +6,7 @@ import pygame
 
 class Room:
     def __init__(self):
-        self.enemies: list[Objects.Entity] = None
+        self.enemies: list[Objects.Entity] = []
         self.hasTreasure: bool = False
         self.loot: list[Objects.Item] = []
 
@@ -43,12 +43,12 @@ class TurnManager:
 
         playerPct = player.health / player.baseHealth * 50
         playerBarPos = (50, self.__screen.h - 100 - 2 * self.__pixelSize)
-        self.__screen.draw_game_object(self.__healthBarSprite, pygame.Rect(playerBarPos[0], playerBarPos[1], 52, 4))
-        self.__screen.draw_rect((255, 0, 0), pygame.Rect(playerBarPos[0] + self.__pixelSize, playerBarPos[1] + self.__pixelSize,
+        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(playerBarPos[0], playerBarPos[1], 52, 4))
+        self.__screen.draw.rect((255, 0, 0), pygame.Rect(playerBarPos[0] + self.__pixelSize, playerBarPos[1] + self.__pixelSize,
                                                          playerPct * self.__pixelSize, 2 * self.__pixelSize))
 
         enemyPct = enemy.health / enemy.baseHealth * 50
         enemyBarPos = (self.__screen.w - 50 - 52 * self.__pixelSize, 50)
-        self.__screen.draw_game_object(self.__healthBarSprite, pygame.Rect(enemyBarPos[0], enemyBarPos[1], 52, 4))
-        self.__screen.draw_rect((255, 0, 0), pygame.Rect(enemyBarPos[0] + self.__pixelSize, enemyBarPos[1] + self.__pixelSize,
+        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(enemyBarPos[0], enemyBarPos[1], 52, 4))
+        self.__screen.draw.rect((255, 0, 0), pygame.Rect(enemyBarPos[0] + self.__pixelSize, enemyBarPos[1] + self.__pixelSize,
                                                          enemyPct * self.__pixelSize, 2 * self.__pixelSize))

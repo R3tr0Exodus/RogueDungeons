@@ -3,6 +3,7 @@ import pygame
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
 from Utility import check_button_press, Layers, update_gameobjects
+import manager
 
 
 def open_inv():
@@ -28,6 +29,12 @@ if __name__ == "__main__":
 
     # Entities
     Jeffrey = Objects.Player(50, 0, pygame.Rect(425, 455, 100, 100), Layers.ENTITIES)
+    Jeffrey.baseHealth = 25
+    Jeffrey.health = 1
+
+    # Managers
+    turnManager = manager.TurnManager(Jeffrey, [], window)
+
 
     # Buttons
     invButton = Objects.UiButton(open_inv, pygame.Rect(700, 550, 100, 100), Layers.UI),
@@ -37,6 +44,7 @@ if __name__ == "__main__":
     running = True
     while running:
         update_gameobjects(window)
+        turnManager.draw_hp(Jeffrey, Jeffrey)
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event

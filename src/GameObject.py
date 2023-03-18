@@ -3,13 +3,7 @@ from enum import Enum
 
 
 class GameObject(object):
-    # Static variables
     instancelist = []  # keep track of all gameobjects
-
-    # Instance variables
-    sprite: pygame.Surface
-    rect: pygame.Rect
-    layer: int = 0
 
     def __init__(self, rect: pygame.Rect, layer: int, spritePath="../sprites/Error_Placeholder.png"):
         self.sprite = pygame.image.load(spritePath)

@@ -22,4 +22,4 @@ def check_button_press(buttons: list[Objects.UiButton], mousePos):
 def update_gameobjects(window: WR.WindowRenderer):
     for obj in Objects.GameObject.instancelist:
         obj.update()
-        window.draw_gameobject(obj)
+        window.draw.gameobject(obj)
