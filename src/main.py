@@ -34,7 +34,6 @@ if __name__ == "__main__":
     # Managers
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
-
     # Buttons
     invButton = Objects.UiButton(open_inv, pygame.Rect(700, 550, 100, 100), Layers.UI),
     attButton = Objects.UiButton(start_attack, pygame.Rect(125, 550, 450, 100), Layers.UI)
@@ -50,13 +49,6 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN:
-                match event:
-                    case pygame.K_ESCAPE:
-                        running = False
-
-                    # Add more buttons later, perhaps shortcuts?
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     buttons = [obj for obj in Objects.GameObject.instancelist
@@ -64,5 +56,8 @@ if __name__ == "__main__":
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            running = False
 
 pygame.quit()
