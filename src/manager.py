@@ -22,9 +22,6 @@ class DungeonManager:
     def advance_dungeon(self):
         self.roomIndex += 1
 
-    def draw_background(self):
-        
-
 
 class TurnManager:
     def __init__(self, player: GameObject.Player, enemy_list: list[GameObject.Entity], screen: WindowRenderer):

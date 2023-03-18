@@ -25,7 +25,7 @@ def use_item():
 if __name__ == "__main__":
     pygame.init()
 
-    window = WindowRenderer((pygame.FULLSCREEN | pygame.SHOWN), 1024, 746)
+    window = WindowRenderer(pygame.SHOWN, 1024, 767)
     window.set_background_color(255, 0, 255)
     center = window.get_center()
 
@@ -44,6 +44,7 @@ if __name__ == "__main__":
 
     running = True
     while running:
+        window.draw.background('../sprites/Cobble_Wall.png')
         update_gameobjects(window)
         turnManager.draw_hp(Jeffrey, Jeffrey)
         window.update()
