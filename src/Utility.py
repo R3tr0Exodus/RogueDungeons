@@ -15,7 +15,7 @@ class Layers:
 
 def check_button_press(buttons: list[Objects.UiButton], mousePos):
     for button in buttons:
-        if button.rect.collidepoint(mousePos):
+        if button.rect.collidepoint(mousePos) and button.visible:
             button.on_press()
 
 

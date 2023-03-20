@@ -1,6 +1,5 @@
 import pygame
 
-
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
@@ -29,7 +28,9 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    pass
+
+    def __init__(self):
+        self.type = 'attack'
 
 
 class Buff(GameObject):
@@ -56,10 +57,14 @@ class Player(Entity):
         super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
-        self.attackItem: Item
-        self.defensiveItem: Item
+        self.attackItem: Item = Item()
+        self.defensiveItem: Item = Item()
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
+        self.usingInv = False
+
+    def update(self):
+        pass
 
     def get_inventory(self):
         return self.__inventory
@@ -70,6 +75,25 @@ class Player(Entity):
     def use_item(self):
         pass
 
+    def set_attack_item(self, index):
+        self.__inventory.insert(index, self.attackItem)
+        self.attackItem = self.__inventory[index+1]
+        self.__inventory.pop(index+1)
+
+    def set_def_item(self, index):
+        self.__inventory.insert(index, self.defensiveItem)
+        self.defensiveItem = self.__inventory[index + 1]
+        self.__inventory.pop(index + 1)
+
+    def toggle_inv(self, InvButton):
+        self.usingInv = not self.usingInv
+        if self.usingInv:
+            buttons = [obj for obj in GameObject.instancelist
+                       if 'UiButton' in obj.__class__.__name__]
+
+            for button in buttons:
+                if button != InvButton:
+                    button.visible = False
 
 class UiButton(GameObject):
 

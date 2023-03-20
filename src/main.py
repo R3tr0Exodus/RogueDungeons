@@ -25,7 +25,7 @@ def use_item():
 if __name__ == "__main__":
     pygame.init()
 
-    window = WindowRenderer(pygame.SHOWN)
+    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN), 2560, 1440)
     window.set_background_color(255, 0, 255)
     center = window.get_center()
 
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
     # Buttons
-    invButton = Objects.UiButton(open_inv, center[0] + 300, center[1] + 300, 0.2, Layers.UI)
-    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 300, 0.2, Layers.UI)
+    invButton = Objects.UiButton(Jeffrey.toggle_inv, center[0] + 300, center[1] + 200, 10, Layers.UI, "../sprites/Backpack.png")
+    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
     running = True
