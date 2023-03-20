@@ -77,13 +77,11 @@ class Player(Entity):
 
     def set_attack_item(self, index):
         self.__inventory.insert(index, self.attackItem)
-        self.attackItem = self.__inventory[index+1]
-        self.__inventory.pop(index+1)
+        self.attackItem = self.__inventory.pop(index+1)
 
     def set_def_item(self, index):
         self.__inventory.insert(index, self.defensiveItem)
-        self.defensiveItem = self.__inventory[index + 1]
-        self.__inventory.pop(index + 1)
+        self.defensiveItem = self.__inventory.pop(index+1)
 
     def toggle_inv(self, InvButton):
         self.usingInv = not self.usingInv
