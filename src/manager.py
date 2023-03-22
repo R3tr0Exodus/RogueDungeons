@@ -2,6 +2,8 @@ import GameObject as Objects
 import GameObject
 from WindowRenderer import WindowRenderer
 import pygame
+import random
+import LootTables
 
 
 class Room:
@@ -12,15 +14,40 @@ class Room:
 
 
 class DungeonManager:
-    roomIndex: int = 0
-    rooms: list = []
+    treasureRoomPct: float = 0.33
+
+    # Enemy pct must equal exactly 1
+    skeletonPct: float = 0.33
+    goblinPct: float = 0.33
+    witchPct: float = 0.33
 
     def __init__(self):
-        pass
-        #   Generate random rooms
+        self.roomList: list = []
+        self.roomIndex: int = 0
 
     def advance_dungeon(self):
         self.roomIndex += 1
+
+    def add_rnd_room(self):
+        new_room: Room = Room()
+        # Room type
+        if random.uniform(0, 1) <= self.treasureRoomPct:
+            new_room.hasTreasure = True
+
+            new_room.loot = LootTables.common[random.randint(0, len(LootTables.common)-1)]
+        else:
+            new_room.hasTreasure = False
+
+        # Enemies
+        enemy_number = random.uniform(0, 1)
+        if enemy_number <= self.skeletonPct:
+            new_room.enemies.append("skeleton")
+        elif enemy_number <= sum([self.skeletonPct, self.goblinPct]):
+            new_room.enemies.append("goblin")
+        else:
+            new_room.enemies.append("witch")
+
+        self.roomList.append(new_room)
 
 
 class TurnManager:
@@ -41,14 +68,18 @@ class TurnManager:
 
     def draw_hp(self, player: GameObject.Player, enemy: GameObject.Entity):
 
-        playerPct = player.health / player.baseHealth * 50
-        playerBarPos = (50, self.__screen.h - 100 - 2 * self.__pixelSize)
-        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(playerBarPos[0], playerBarPos[1], 52, 4))
-        self.__screen.draw.rect((255, 0, 0), pygame.Rect(playerBarPos[0] + self.__pixelSize, playerBarPos[1] + self.__pixelSize,
-                                                         playerPct * self.__pixelSize, 2 * self.__pixelSize))
+        player_pct = player.health / player.baseHealth * 50
+        player_bar_pos = (50, self.__screen.h - 100 - 2 * self.__pixelSize)
+        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(player_bar_pos[0],
+                                                                      player_bar_pos[1], 52, 4))
+        self.__screen.draw.rect((255, 0, 0), pygame.Rect(player_bar_pos[0] + self.__pixelSize,
+                                                         player_bar_pos[1] + self.__pixelSize,
+                                                         player_pct * self.__pixelSize, 2 * self.__pixelSize))
 
-        enemyPct = enemy.health / enemy.baseHealth * 50
-        enemyBarPos = (self.__screen.w - 50 - 52 * self.__pixelSize, 50)
-        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(enemyBarPos[0], enemyBarPos[1], 52, 4))
-        self.__screen.draw.rect((255, 0, 0), pygame.Rect(enemyBarPos[0] + self.__pixelSize, enemyBarPos[1] + self.__pixelSize,
-                                                         enemyPct * self.__pixelSize, 2 * self.__pixelSize))
+        enemy_pct = enemy.health / enemy.baseHealth * 50
+        enemy_bar_pos = (self.__screen.w - 50 - 52 * self.__pixelSize, 50)
+        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(enemy_bar_pos[0],
+                                                                      enemy_bar_pos[1], 52, 4))
+        self.__screen.draw.rect((255, 0, 0), pygame.Rect(enemy_bar_pos[0] + self.__pixelSize,
+                                                         enemy_bar_pos[1] + self.__pixelSize,
+                                                         enemy_pct * self.__pixelSize, 2 * self.__pixelSize))

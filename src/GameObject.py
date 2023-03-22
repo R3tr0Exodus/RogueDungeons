@@ -25,7 +25,9 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    pass
+    def __init__(self, weight: int, name: str):
+        self.weight = weight
+        self.name = name
 
 
 class Buff(GameObject):
