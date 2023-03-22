@@ -1,5 +1,6 @@
 import pygame
 
+
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
@@ -17,6 +18,9 @@ class GameObject(object):
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
 
+    def __del__(self):
+        GameObject.instancelist.remove(self)
+
     def update(self):
         pass
 
@@ -25,9 +29,9 @@ class GameObject(object):
 
 
 class Item(GameObject):
-
-    def __init__(self):
-        self.type = 'attack'
+    def __init__(self, weight: int, name: str):
+        self.weight = weight
+        self.name = name
 
 
 class Buff(GameObject):
