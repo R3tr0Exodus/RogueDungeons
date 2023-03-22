@@ -27,7 +27,8 @@ if __name__ == "__main__":
 
     window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN), 2560, 1440)
     window.set_background_color(255, 0, 255)
-    center = window.get_center()
+    centerPX = window.get_center()
+    center = tuple([coord/10 for coord in centerPX])
 
     # Entities
     Jeffrey = Objects.Player(50, 0, center[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
     # Buttons
-    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, invBackground), center[0] + 300, center[1] + 200, 10, Layers.UI, "../sprites/Backpack.png")
+    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, invBackground), center[0] + 16, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 

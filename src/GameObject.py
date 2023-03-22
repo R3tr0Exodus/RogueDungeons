@@ -12,13 +12,10 @@ class GameObject(object):
                                              (self.sprite.get_rect().width * scale,
                                               self.sprite.get_rect().height * scale))
 
-        self.rect = pygame.Rect(xPos, yPos, self.sprite.get_rect().width, self.sprite.get_rect().height)
+        self.rect = pygame.Rect(xPos * scale, yPos * scale, self.sprite.get_rect().width, self.sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
-
-    def __del__(self):
-        GameObject.instancelist.remove(self)
 
     def update(self):
         pass
