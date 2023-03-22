@@ -1,5 +1,5 @@
-
 import pygame
+from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
 from Utility import check_button_press, Layers, update_gameobjects
@@ -24,11 +24,13 @@ def use_item():
 
 if __name__ == "__main__":
     pygame.init()
-    window = WindowRenderer(50, 50, (pygame.FULLSCREEN | pygame.SHOWN))
+
+    window = WindowRenderer(pygame.SHOWN)
     window.set_background_color(255, 0, 255)
+    center = window.get_center()
 
     # Entities
-    Jeffrey = Objects.Player(50, 0, pygame.Rect(425, 455, 100, 100), Layers.ENTITIES)
+    Jeffrey = Objects.Player(50, 0, center[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
     Jeffrey.baseHealth = 25
     Jeffrey.health = 1
 
@@ -36,12 +38,13 @@ if __name__ == "__main__":
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
     # Buttons
-    invButton = Objects.UiButton(open_inv, pygame.Rect(700, 550, 100, 100), Layers.UI),
-    attButton = Objects.UiButton(start_attack, pygame.Rect(125, 550, 450, 100), Layers.UI)
-    nxtLvlButton = Objects.UiButton(continue_dungeon, pygame.Rect(425, 20, 150, 50), Layers.UI)
+    invButton = Objects.UiButton(open_inv, center[0] + 300, center[1] + 300, 0.2, Layers.UI)
+    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 300, 0.2, Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
     running = True
     while running:
+        window.draw.background('../sprites/Cobble_Wall.png', 10)
         update_gameobjects(window)
         turnManager.draw_hp(Jeffrey, Jeffrey)
         window.update()

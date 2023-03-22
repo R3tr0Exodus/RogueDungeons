@@ -1,23 +1,26 @@
 import pygame
+from math import ceil
 from GameObject import GameObject
 
 
 class WindowRenderer:
-    def __init__(self, width=1024, height=768):
+    def __init__(self, flags, width=1920, height=1080):
         self.w = width
         self.h = height
-        self.__screen = pygame.display.set_mode((self.w, self.h))
+        self.__screen = pygame.display.set_mode((self.w, self.h), flags=flags)
         self.__backgroundColor = (255, 255, 255)
 
         # Reference to inner class
-        self.draw = WindowRenderer.Draw(self.__screen)
+        self.draw = WindowRenderer.Draw(self.w, self.h, self.__screen)
 
     def update(self):
         pygame.display.flip()
         self.clear()
 
     class Draw:
-        def __init__(self, screen):
+        def __init__(self, w, h, screen):
+            self.w = w
+            self.h = h
             self.__screen = screen
 
         def gameobject(self, gameObj: GameObject):
@@ -29,8 +32,25 @@ class WindowRenderer:
         def sprite(self, sprite: pygame.surface, rect: pygame.rect):
             self.__screen.blit(sprite, rect)
 
+        def background(self, spritePath: str, scale):
+            sprite = pygame.image.load(spritePath)
+            sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * scale, sprite.get_rect().height * scale))
+
+            spriteSize = sprite.get_rect()
+            blocksX = ceil(self.w / spriteSize.w)
+            blocksY = ceil(self.h / spriteSize.h)
+
+            for i in range(0, blocksX):
+                sprite = pygame.transform.flip(sprite, False, True)
+                for j in range(0, blocksY):
+                    sprite = pygame.transform.flip(sprite, True, False)
+                    self.__screen.blit(sprite, (i * spriteSize.w, j * spriteSize.h, spriteSize.w, spriteSize.h))
+
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
 
     def clear(self):
         self.__screen.fill(self.__backgroundColor)
+
+    def get_center(self):
+        return self.__screen.get_rect().center

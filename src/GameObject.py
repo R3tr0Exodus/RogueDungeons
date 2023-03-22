@@ -1,15 +1,19 @@
 import pygame
-from enum import Enum
 
 
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, rect: pygame.Rect, layer: int, spritePath="../sprites/Error_Placeholder.png"):
+    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Error_Placeholder.png", visible: bool=True):
         self.sprite = pygame.image.load(spritePath)
-        self.sprite = pygame.transform.scale(self.sprite, (rect.width, rect.height))
-        self.rect = rect
         self.layer = layer
+        self.visible = visible
+
+        self.sprite = pygame.transform.scale(self.sprite,
+                                             (self.sprite.get_rect().width * scale,
+                                              self.sprite.get_rect().height * scale))
+
+        self.rect = pygame.Rect(xPos, yPos, self.sprite.get_rect().width, self.sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
@@ -35,8 +39,8 @@ class Buff(GameObject):
 
 
 class Entity(GameObject):
-    def __init__(self, baseHealth, baseDmg, rect, layer: int, spritePath="../sprites/Jerry_sprite.png"):
-        super().__init__(rect, layer, spritePath)
+    def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png", visible=True):
+        super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
 
@@ -50,8 +54,8 @@ class Entity(GameObject):
 
 
 class Player(Entity):
-    def __init__(self, baseHealth, baseDmg, rect, layer: int, spritePath="../sprites/Jerry_sprite.png"):
-        super().__init__(baseHealth, baseDmg, rect, layer, spritePath)
+    def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png", visible=True):
+        super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
         self.attackItem: Item
@@ -71,11 +75,11 @@ class Player(Entity):
 
 class UiButton(GameObject):
 
-    def __init__(self, buttonFunc, rect, layer: int, sprite=None):
+    def __init__(self, buttonFunc, xPos, yPos, scale, layer: int, sprite=None, visible=True):
         if sprite is None:
-            super().__init__(rect, layer)
+            super().__init__(xPos, yPos, scale, layer, visible=visible)
         else:
-            super().__init__(rect, layer, sprite)
+            super().__init__(xPos, yPos, scale, layer, sprite, visible)
 
         self.__buttonFunc = buttonFunc
 
