@@ -24,3 +24,14 @@ def update_gameobjects(window: WR.WindowRenderer):
         obj.update()
         if obj.visible:
             window.draw.gameobject(obj)
+
+
+def toggle_inv(player, invButton):
+    player.usingInv = not player.usingInv
+    buttons = [obj for obj in Objects.GameObject.instancelist
+               if 'UiButton' in obj.__class__.__name__]
+
+    for button in buttons:
+        if button != invButton:
+            button.visible = not button.visible
+            print(f'{button.visible=}')

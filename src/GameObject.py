@@ -83,15 +83,6 @@ class Player(Entity):
         self.__inventory.insert(index, self.defensiveItem)
         self.defensiveItem = self.__inventory.pop(index+1)
 
-    def toggle_inv(self, InvButton):
-        self.usingInv = not self.usingInv
-        if self.usingInv:
-            buttons = [obj for obj in GameObject.instancelist
-                       if 'UiButton' in obj.__class__.__name__]
-
-            for button in buttons:
-                if button != InvButton:
-                    button.visible = False
 
 class UiButton(GameObject):
 

@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects
+from Utility import check_button_press, Layers, update_gameobjects, toggle_inv
 import manager
 
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
     # Buttons
-    invButton = Objects.UiButton(Jeffrey.toggle_inv, center[0] + 300, center[1] + 200, 10, Layers.UI, "../sprites/Backpack.png")
+    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton), center[0] + 300, center[1] + 200, 10, Layers.UI, "../sprites/Backpack.png")
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
