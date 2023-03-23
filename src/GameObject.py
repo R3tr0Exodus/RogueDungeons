@@ -65,9 +65,8 @@ class Entity(GameObject):
 
 
 class Enemy(Entity):
-
-    def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
-                 debuff: Buff = Buff(), visible=True):
+    def __init__(self, baseHealth, baseDmg, debuff, xPos, yPos, scale, layer: int,
+                 spritePath="../sprites/Jerry_sprite.png", visible=True):
         super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
         self.__debuff: Buff = debuff
 
