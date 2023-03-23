@@ -27,7 +27,6 @@ class GameObject(object):
     def layer(self):
         return self._layer
 
-
     def update(self):
         pass
 
