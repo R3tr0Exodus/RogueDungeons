@@ -53,8 +53,7 @@ class WindowRenderer:
                 enemy.visible = True
             # Draw treasure
             if room.hasTreasure:
-                sprite = pygame.image.load("../sprites/Error_Placeholder.png")
-                self.sprite(sprite, pygame.Rect((10, 10, 0.2, 0.2)))
+                manager.chestButton.visible = True
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)

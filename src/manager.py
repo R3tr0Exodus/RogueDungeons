@@ -4,6 +4,7 @@ from WindowRenderer import WindowRenderer
 import pygame
 import random
 import LootTables
+import Utility
 
 
 class Room:
@@ -26,16 +27,23 @@ class DungeonManager:
     roomIndex: int = 0
     roomList: list[Room] = []
 
+    # Treasure
+    chestButton: Objects.UiButton
+
     @staticmethod
     def advance_dungeon():
         for enemy in DungeonManager.currentRoom.enemies:
             enemy.visible = False
+        DungeonManager.chestButton.visible = False
 
         DungeonManager.roomIndex += 1
         DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
 
     @staticmethod
     def add_rnd_room(num: int):
+        chest_sprite_path = "../sprites/Chest_sprite.png"
+        DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, 10, 10, 4, Utility.Layers.OBJECTS,
+                                                      chest_sprite_path, False)
         for i in range(num):
             new_room: Room = Room()
             # Set room type
@@ -49,14 +57,18 @@ class DungeonManager:
             # Add enemies
             enemy_number = random.uniform(0, 1)
             if enemy_number <= DungeonManager.skeletonPct:
-                new_room.enemies.append(Objects.Skeleton(10, 10, 10, 1))
+                new_room.enemies.append(Objects.Skeleton(10, 10, 10, Utility.Layers.ENTITIES))
             elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
-                new_room.enemies.append(Objects.Goblin(10, 10, 10, 1))
+                new_room.enemies.append(Objects.Goblin(10, 10, 10, Utility.Layers.ENTITIES))
             else:
-                new_room.enemies.append(Objects.Witch(10, 10, 10, 1))
+                new_room.enemies.append(Objects.Witch(10, 10, 10, Utility.Layers.ENTITIES))
 
             DungeonManager.roomList.append(new_room)
         DungeonManager.currentRoom = DungeonManager.roomList[0]
+
+    @staticmethod
+    def loot():
+        print(f'looted {len(DungeonManager.currentRoom.loot)} item(s)')
 
 
 class TurnManager:
