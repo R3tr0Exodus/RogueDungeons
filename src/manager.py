@@ -8,7 +8,7 @@ import LootTables
 
 class Room:
     def __init__(self):
-        self.enemies: list[Objects.Entity] = []
+        self.enemies: list[Objects.Enemy] = []
         self.hasTreasure: bool = False
         self.loot: list[Objects.Item] = []
 
@@ -21,33 +21,42 @@ class DungeonManager:
     goblinPct: float = 0.33
     witchPct: float = 0.33
 
-    def __init__(self):
-        self.roomList: list = []
-        self.roomIndex: int = 0
+    # Room manager
+    currentRoom: Room
+    roomIndex: int = 0
+    roomList: list[Room] = []
 
-    def advance_dungeon(self):
-        self.roomIndex += 1
+    @staticmethod
+    def advance_dungeon():
+        for enemy in DungeonManager.currentRoom.enemies:
+            enemy.visible = False
 
-    def add_rnd_room(self):
-        new_room: Room = Room()
-        # Room type
-        if random.uniform(0, 1) <= self.treasureRoomPct:
-            new_room.hasTreasure = True
+        DungeonManager.roomIndex += 1
+        DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
 
-            new_room.loot = LootTables.common[random.randint(0, len(LootTables.common)-1)]
-        else:
-            new_room.hasTreasure = False
+    @staticmethod
+    def add_rnd_room(num: int):
+        for i in range(num):
+            new_room: Room = Room()
+            # Set room type
+            if random.uniform(0, 1) <= DungeonManager.treasureRoomPct:
+                new_room.hasTreasure = True
 
-        # Enemies
-        enemy_number = random.uniform(0, 1)
-        if enemy_number <= self.skeletonPct:
-            new_room.enemies.append("skeleton")
-        elif enemy_number <= sum([self.skeletonPct, self.goblinPct]):
-            new_room.enemies.append("goblin")
-        else:
-            new_room.enemies.append("witch")
+                new_room.loot = LootTables.common[random.randint(0, len(LootTables.common)-1)]
+            else:
+                new_room.hasTreasure = False
 
-        self.roomList.append(new_room)
+            # Add enemies
+            enemy_number = random.uniform(0, 1)
+            if enemy_number <= DungeonManager.skeletonPct:
+                new_room.enemies.append(Objects.Skeleton(10, 10, 10, 1))
+            elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
+                new_room.enemies.append(Objects.Goblin(10, 10, 10, 1))
+            else:
+                new_room.enemies.append(Objects.Witch(10, 10, 10, 1))
+
+            DungeonManager.roomList.append(new_room)
+        DungeonManager.currentRoom = DungeonManager.roomList[0]
 
 
 class TurnManager:

@@ -75,6 +75,49 @@ class Enemy(Entity):
         return self.__debuff
 
 
+class Skeleton(Enemy):
+    spritePath = "../sprites/Skeleton_sprite.png"
+    baseHealth = 20
+    baseDmg = 20
+    debuff = 10
+
+    def __init__(self, xPos, yPos, scale, layer: int):
+        super().__init__(self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
+
+class Goblin(Enemy):
+    spritePath = "../sprites/Goblin_sprite.png"
+    baseHealth = 20
+    baseDmg = 20
+    debuff = 10
+
+    def __init__(self, xPos, yPos, scale, layer: int):
+        super().__init__(self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
+
+class Skeleton(Enemy):
+    spritePath = "../sprites/Skeleton_sprite.png"
+    baseHealth = 20
+    baseDmg = 20
+    debuff = 10
+
+    def __init__(self, xPos, yPos, scale, layer: int):
+        super().__init__(self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
+
+class Witch(Enemy):
+    spritePath = "../sprites/Goblin_sprite.png"
+    baseHealth = 20
+    baseDmg = 20
+    debuff = 10
+
+    def __init__(self, xPos, yPos, scale, layer: int):
+        super().__init__(self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
 class Player(Entity):
     def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
                  visible=True):

@@ -16,6 +16,7 @@ def start_attack():
 
 def continue_dungeon():
     print('continued in dungeon')
+    manager.DungeonManager.advance_dungeon()
 
 
 def use_item():
@@ -25,7 +26,9 @@ def use_item():
 if __name__ == "__main__":
     pygame.init()
 
-    window = WindowRenderer(pygame.SHOWN)
+    manager.DungeonManager.add_rnd_room(10)
+
+    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN))
     window.set_background_color(255, 0, 255)
     center = window.get_center()
 
@@ -45,6 +48,7 @@ if __name__ == "__main__":
     running = True
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
+        window.draw.room(manager.DungeonManager)
         update_gameobjects(window)
         turnManager.draw_hp(Jeffrey, Jeffrey)
         window.update()

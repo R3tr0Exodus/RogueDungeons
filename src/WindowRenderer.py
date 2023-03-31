@@ -36,15 +36,25 @@ class WindowRenderer:
             sprite = pygame.image.load(spritePath)
             sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * scale, sprite.get_rect().height * scale))
 
-            spriteSize = sprite.get_rect()
-            blocksX = ceil(self.w / spriteSize.w)
-            blocksY = ceil(self.h / spriteSize.h)
+            sprite_size = sprite.get_rect()
+            blocks_x = ceil(self.w / sprite_size.w)
+            blocks_y = ceil(self.h / sprite_size.h)
 
-            for i in range(0, blocksX):
+            for i in range(0, blocks_x):
                 sprite = pygame.transform.flip(sprite, False, True)
-                for j in range(0, blocksY):
+                for j in range(0, blocks_y):
                     sprite = pygame.transform.flip(sprite, True, False)
-                    self.__screen.blit(sprite, (i * spriteSize.w, j * spriteSize.h, spriteSize.w, spriteSize.h))
+                    self.__screen.blit(sprite, (i * sprite_size.w, j * sprite_size.h, sprite_size.w, sprite_size.h))
+
+        def room(self, manager):
+            room = manager.currentRoom
+            # Draw enemies
+            for enemy in room.enemies:
+                enemy.visible = True
+            # Draw treasure
+            if room.hasTreasure:
+                sprite = pygame.image.load("../sprites/Error_Placeholder.png")
+                self.sprite(sprite, pygame.Rect((10, 10, 0.2, 0.2)))
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
