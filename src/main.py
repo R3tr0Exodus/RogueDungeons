@@ -39,18 +39,19 @@ if __name__ == "__main__":
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
     # Buttons
-    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, invBackground), center[0] + 16, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
+    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, (invBackground, attInvSlot, defInvSlot)), center[0] + 40, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
     # UI Elements
-    invBackground = Objects.GameObject(center[0] - 500, center[1] - 325, 1, Layers.UI, '../sprites/B_square.png', visible=False)
+    invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI, '../sprites/Inventroy_backdrop.png', visible=False)
+    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
+    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
 
     running = True
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
         update_gameobjects(window)
-        print(f'{invBackground.visible=}')
         turnManager.draw_hp(Jeffrey, Jeffrey)
         window.update()
         for event in pygame.event.get():
@@ -68,5 +69,6 @@ if __name__ == "__main__":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
+
 
 pygame.quit()

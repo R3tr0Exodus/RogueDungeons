@@ -18,9 +18,6 @@ class GameObject(object):
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
 
-    def __del__(self):
-        GameObject.instancelist.remove(self)
-
     def update(self):
         pass
 
@@ -29,9 +26,10 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    def __init__(self, weight: int, name: str):
+    def __init__(self, weight: int, type: str, value: int):
         self.weight = weight
-        self.name = name
+        self.type = type
+        self.value = value
 
 
 class Buff(GameObject):
@@ -58,8 +56,11 @@ class Player(Entity):
         super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
-        self.attackItem: Item = Item()
-        self.defensiveItem: Item = Item()
+        for i in range(0, 11):
+            self.__inventory[i] = Item(0, 'empty', 0)
+
+        self.attackItem: Item = Item(1, 'bob')
+        self.defensiveItem: Item = Item(2, 'dick')
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False
