@@ -22,26 +22,46 @@ def continue_dungeon():
         print('continued in dungeon')
         DungeonManager.advance_dungeon()
     else:
-        print("ACCESS DENIED!")
+        print("!!ACCESS DENIED!!")
 
 
 def use_item():
     print('used item')
 
 
-# Main
-if __name__ == "__main__":
-    pygame.init()
+def start_main_menu():
+    manager.UI.MainMenu.show()
 
-    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN))
-    window.set_background_color(255, 0, 255)
-    coords.set_coords(window)
-    center = coords.CENTER
+    while manager.UI.MainMenu.isShowing:
+        update_gameobjects(window)
+        window.update()
+        for event in pygame.event.get():
+            # Check for QUIT event
+            if event.type == pygame.QUIT:
+                manager.UI.MainMenu.isShowing = False
+                pygame.quit()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    buttons = [obj for obj in Objects.GameObject.instancelist
+                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+
+                    check_button_press(buttons, pygame.mouse.get_pos())
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            manager.UI.MainMenu.isShowing = False
+            pygame.quit()
+    manager.UI.MainMenu.hide()
+
+
+def run_game():
+    running = True
 
     # Entities
-    Jeffrey = Objects.Player("Jeffrey", 50, 5, coords.CENTER[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
-    Jeffrey.baseHealth = 25
-    Jeffrey.health = 25
+    Jeffrey = Objects.Player("Jeffrey", 50, 10, coords.CENTER[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
+    Jeffrey.baseHealth = 250
+    Jeffrey.health = 250
 
     # Managers
     DungeonManager.init(Jeffrey)
@@ -53,7 +73,6 @@ if __name__ == "__main__":
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 300, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
-    running = True
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
         window.draw.room(manager.DungeonManager)
@@ -76,5 +95,19 @@ if __name__ == "__main__":
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
+
+
+# Main
+if __name__ == "__main__":
+    pygame.init()
+
+    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN))
+    window.set_background_color(255, 0, 255)
+    coords.set_coords(window)
+    center = coords.CENTER
+
+    start_main_menu()
+    run_game()
+
 
 pygame.quit()

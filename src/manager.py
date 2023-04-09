@@ -112,7 +112,6 @@ class TurnManager:
 
     @staticmethod
     def next_turn():
-        print(TurnManager.turnIndex)
         if DungeonManager.currentRoom.enemies[0].health >= 1:
             TurnManager.turnIndex += 1
             TurnManager.playerToMove = TurnManager.turnIndex % 2 == 0
@@ -164,3 +163,33 @@ class TurnManager:
 
         draw_bar(player, left_pos)
         draw_bar(enemy, right_pos)
+
+
+class UI:
+    class MainMenu:
+        startButton: Objects.UiButton
+        quitButton: Objects.UiButton
+        isShowing: bool
+
+        @staticmethod
+        def show():
+            UI.MainMenu.isShowing = True
+            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 10, coords.CENTER[1]-100, 0.2,
+                                                       Utility.Layers.UI)
+            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 10, coords.CENTER[1]+100, 0.2,
+                                                      Utility.Layers.UI)
+
+        @staticmethod
+        def hide():
+            UI.MainMenu.isShowing = False
+            UI.MainMenu.startButton.remove()
+            UI.MainMenu.quitButton.remove()
+
+        @staticmethod
+        def start_game():
+            UI.MainMenu.isShowing = False
+
+        @staticmethod
+        def quit_game():
+            pygame.quit()
+
