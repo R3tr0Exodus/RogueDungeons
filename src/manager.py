@@ -5,6 +5,7 @@ import pygame
 import random
 import LootTables
 import Utility
+from Utility import coords
 
 
 class Room:
@@ -12,6 +13,7 @@ class Room:
         self.enemies: list[Objects.Enemy] = []
         self.hasTreasure: bool = False
         self.loot: list[Objects.Item] = []
+        self.isCleared: bool = False
 
 
 class DungeonManager:
@@ -30,6 +32,16 @@ class DungeonManager:
     # Treasure
     chestButton: Objects.UiButton
 
+    # Player
+    player: GameObject.Player
+
+    # Buttons
+    nextLvlButton: GameObject.UiButton
+
+    @staticmethod
+    def init(player: GameObject.Player):
+        DungeonManager.player = player
+
     @staticmethod
     def advance_dungeon():
         for enemy in DungeonManager.currentRoom.enemies:
@@ -38,6 +50,8 @@ class DungeonManager:
 
         DungeonManager.roomIndex += 1
         DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
+
+        TurnManager.turnIndex = 0
 
     @staticmethod
     def add_rnd_room(num: int):
@@ -57,11 +71,11 @@ class DungeonManager:
             # Add enemies
             enemy_number = random.uniform(0, 1)
             if enemy_number <= DungeonManager.skeletonPct:
-                new_room.enemies.append(Objects.Skeleton(10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Skeleton(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
             elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
-                new_room.enemies.append(Objects.Goblin(10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Goblin(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
             else:
-                new_room.enemies.append(Objects.Witch(10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Witch(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
 
             DungeonManager.roomList.append(new_room)
         DungeonManager.currentRoom = DungeonManager.roomList[0]
@@ -72,35 +86,81 @@ class DungeonManager:
 
 
 class TurnManager:
-    def __init__(self, player: GameObject.Player, enemy_list: list[GameObject.Entity], screen: WindowRenderer):
-        self.player = player
-        self.enemies = enemy_list
-        self.__screen = screen
+    # Objects
+    player: Objects.Player
+    enemies: list[Objects.Enemy]
+    __screen: WindowRenderer
 
-        self.turnIndex: int = 0
-        self.__pixelSize: int = 7
+    # Turn manager
+    turnIndex: int = 0
+    playerToMove: bool = True
 
-        self.__healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
-        self.__healthBarSprite = pygame.transform.scale(self.__healthBarSprite,
-                                                        (52 * self.__pixelSize, 4 * self.__pixelSize))
+    # Healthbar
+    __pixelSize = 7
+    __barPixelLength = 52
+    __healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
+    __healthBarSprite = pygame.transform.scale(__healthBarSprite,
+                                               (__barPixelLength * __pixelSize,
+                                                4 * __pixelSize))
 
-    def next_turn(self):
-        self.turnIndex += 1
+    @staticmethod
+    def init(player: GameObject.Player, screen: WindowRenderer):
+        TurnManager.player = player
+        TurnManager.__screen = screen
 
-    def draw_hp(self, player: GameObject.Player, enemy: GameObject.Entity):
+        TurnManager.turnIndex = 0
 
-        player_pct = player.health / player.baseHealth * 50
-        player_bar_pos = (50, self.__screen.h - 100 - 2 * self.__pixelSize)
-        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(player_bar_pos[0],
-                                                                      player_bar_pos[1], 52, 4))
-        self.__screen.draw.rect((255, 0, 0), pygame.Rect(player_bar_pos[0] + self.__pixelSize,
-                                                         player_bar_pos[1] + self.__pixelSize,
-                                                         player_pct * self.__pixelSize, 2 * self.__pixelSize))
+    @staticmethod
+    def next_turn():
+        print(TurnManager.turnIndex)
+        if DungeonManager.currentRoom.enemies[0].health >= 1:
+            TurnManager.turnIndex += 1
+            TurnManager.playerToMove = TurnManager.turnIndex % 2 == 0
 
-        enemy_pct = enemy.health / enemy.baseHealth * 50
-        enemy_bar_pos = (self.__screen.w - 50 - 52 * self.__pixelSize, 50)
-        self.__screen.draw.sprite(self.__healthBarSprite, pygame.Rect(enemy_bar_pos[0],
-                                                                      enemy_bar_pos[1], 52, 4))
-        self.__screen.draw.rect((255, 0, 0), pygame.Rect(enemy_bar_pos[0] + self.__pixelSize,
-                                                         enemy_bar_pos[1] + self.__pixelSize,
-                                                         enemy_pct * self.__pixelSize, 2 * self.__pixelSize))
+            if not TurnManager.playerToMove:
+                TurnManager.attack_player()
+
+        else:
+            DungeonManager.currentRoom.isCleared = True
+
+    @staticmethod
+    def attack_player():
+        for enemy in DungeonManager.currentRoom.enemies:
+            enemy.attack(TurnManager.player)
+        TurnManager.next_turn()
+
+    @staticmethod
+    def attack_enemy():
+        if DungeonManager.currentRoom.enemies[0].health >= 1:
+            current_enemy: Objects.Enemy = DungeonManager.currentRoom.enemies[0]
+            player_dmg = DungeonManager.player.baseDmg
+            current_enemy.take_damage(player_dmg)
+            TurnManager.next_turn()
+
+
+    @staticmethod
+    def draw_hp(player: GameObject.Player, enemy: GameObject.Entity):
+
+        def draw_bar(entity: GameObject.Entity, pos: tuple):
+            health_pct = entity.health / entity.baseHealth * (TurnManager.__barPixelLength-2)
+            text = f"{entity.name}: {entity.health} / {entity.baseHealth}"
+
+            # bar
+            TurnManager.__screen.draw.sprite(TurnManager.__healthBarSprite, pygame.Rect(pos[0], pos[1],
+                                                                          TurnManager.__barPixelLength, 4))
+            text_rect = pygame.Rect(pos[0], pos[1] - 30, TurnManager.__barPixelLength, 4)
+            TurnManager.__screen.draw.text(text, text_rect)
+
+            # bar fill
+            TurnManager.__screen.draw.rect((255, 0, 0), pygame.Rect(pos[0] + TurnManager.__pixelSize,
+                                                                    pos[1] + TurnManager.__pixelSize,
+                                                                    health_pct * TurnManager.__pixelSize,
+                                                                    2 * TurnManager.__pixelSize))
+
+        left_pos = (coords.LEFT_BOTTOM[0] + 100,
+                    coords.LEFT_BOTTOM[1] - 100)
+        right_pos = (coords.RIGHT_TOP[0] - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
+                     coords.RIGHT_TOP[1] + 4 + 100)
+
+        draw_bar(player, left_pos)
+        draw_bar(enemy, right_pos)

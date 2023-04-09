@@ -8,6 +8,7 @@ class WindowRenderer:
         self.w = width
         self.h = height
         self.__screen = pygame.display.set_mode((self.w, self.h), flags=flags)
+        self.w, self.h = pygame.display.get_surface().get_size()
         self.__backgroundColor = (255, 255, 255)
 
         # Reference to inner class
@@ -31,6 +32,12 @@ class WindowRenderer:
 
         def sprite(self, sprite: pygame.surface, rect: pygame.rect):
             self.__screen.blit(sprite, rect)
+
+        def text(self, text: str, rect: pygame.rect, font_path="../fonts/VT323-Regular.ttf",
+                 color=(255, 255, 255), size=25):
+            font = pygame.font.Font(font_path, size)
+            txt = font.render(text, True, color)
+            self.__screen.blit(txt, rect)
 
         def background(self, spritePath: str, scale):
             sprite = pygame.image.load(spritePath)

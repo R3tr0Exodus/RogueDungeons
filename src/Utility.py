@@ -4,6 +4,22 @@ import WindowRenderer as WR
 from enum import Enum
 
 
+class coords:
+    CENTER: tuple
+    LEFT_TOP: tuple
+    RIGHT_TOP: tuple
+    LEFT_BOTTOM: tuple
+    RIGHT_BOTTOM: tuple
+
+    @staticmethod
+    def set_coords(window):
+        coords.CENTER = window.get_center()
+        coords.LEFT_TOP = (0, 0)
+        coords.RIGHT_TOP = (window.w, 0)
+        coords.LEFT_BOTTOM = (0, window.h)
+        coords.RIGHT_BOTTOM = (window.w, window.h)
+
+
 class Layers:
     UI = 0
     VFX = 1

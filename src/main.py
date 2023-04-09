@@ -2,43 +2,51 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects
+from Utility import check_button_press, Layers, update_gameobjects, coords
 import manager
+from manager import DungeonManager, TurnManager
 
 
+# Button functions
 def open_inv():
     print('opened inventory')
 
 
 def start_attack():
-    print('ATTAAACK')
+    if TurnManager.playerToMove:
+        TurnManager.attack_enemy()
 
 
 def continue_dungeon():
-    print('continued in dungeon')
-    manager.DungeonManager.advance_dungeon()
+    if DungeonManager.currentRoom.isCleared:
+        print('continued in dungeon')
+        DungeonManager.advance_dungeon()
+    else:
+        print("ACCESS DENIED!")
 
 
 def use_item():
     print('used item')
 
 
+# Main
 if __name__ == "__main__":
     pygame.init()
 
-    manager.DungeonManager.add_rnd_room(10)
-
     window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN))
     window.set_background_color(255, 0, 255)
-    center = window.get_center()
+    coords.set_coords(window)
+    center = coords.CENTER
 
     # Entities
-    Jeffrey = Objects.Player(50, 0, center[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
+    Jeffrey = Objects.Player("Jeffrey", 50, 5, coords.CENTER[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
     Jeffrey.baseHealth = 25
-    Jeffrey.health = 1
+    Jeffrey.health = 25
 
     # Managers
-    turnManager = manager.TurnManager(Jeffrey, [], window)
+    DungeonManager.init(Jeffrey)
+    DungeonManager.add_rnd_room(10)
+    TurnManager.init(Jeffrey, window)
 
     # Buttons
     invButton = Objects.UiButton(open_inv, center[0] + 300, center[1] + 300, 0.2, Layers.UI)
@@ -50,7 +58,8 @@ if __name__ == "__main__":
         window.draw.background('../sprites/Cobble_Wall.png', 10)
         window.draw.room(manager.DungeonManager)
         update_gameobjects(window)
-        turnManager.draw_hp(Jeffrey, Jeffrey)
+        TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])
+
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event
