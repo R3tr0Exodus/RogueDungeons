@@ -47,10 +47,16 @@ class DungeonManager:
         for enemy in DungeonManager.currentRoom.enemies:
             enemy.visible = False
         DungeonManager.chestButton.visible = False
-
         DungeonManager.roomIndex += 1
-        DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
 
+        # TODO: THIS IS BAD REMOVE WHEN MAKING AN ACTUAL END
+        # If there are no more rooms, print something and stop instead of error:
+        if DungeonManager.roomIndex > len(DungeonManager.roomList)-1:
+            pygame.quit()
+            print("Sorry no more rooms big sad")
+            exit()
+
+        DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
         TurnManager.turnIndex = 0
 
     @staticmethod
