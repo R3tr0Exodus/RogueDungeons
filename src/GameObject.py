@@ -1,5 +1,4 @@
 import pygame
-from Utility import Layers
 
 
 class GameObject(object):
@@ -63,9 +62,11 @@ class Player(Entity):
         super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
+        for i in range(12):
+            self.__inventory.append(Item(0, 0, 10, 0, 0, 'empty', 0, visible=False))
 
-        self.attackItem: Item = Item(0, 0, 10, Layers.ITEM, 0, 'empty', 0, visible=False)
-        self.defensiveItem: Item = Item(0, 0, 10, Layers.ITEM, 0, 'empty', 0, visible=False)
+        self.attackItem: Item = Item(0, 0, 10, 0, 0, 'empty', 0, visible=False)
+        self.defensiveItem: Item = Item(0, 0, 10, 0, 0, 'empty', 0, visible=False)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False
@@ -76,8 +77,10 @@ class Player(Entity):
     def get_inventory(self):
         return self.__inventory
 
-    def add_inventory(self, item: Item):
-        self.__inventory.append(item)
+    def add_inventory(self, newItem: Item):
+        for i, item in enumerate(self.__inventory):
+            if item.type != 'empty':
+                self.__inventory[i] = item
 
     def use_item(self):
         pass

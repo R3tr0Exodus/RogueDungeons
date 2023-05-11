@@ -1,7 +1,6 @@
 import pygame
 import GameObject as Objects
 import WindowRenderer as WR
-from enum import Enum
 
 
 class Layers:
@@ -18,6 +17,21 @@ def check_button_press(buttons: list[Objects.UiButton], mousePos):
     for button in buttons:
         if button.rect.collidepoint(mousePos) and button.visible:
             button.on_press()
+
+
+def check_item_select(inventory: list[Objects.Item], mousePos):
+    for i, item in enumerate(inventory):
+        if item.rect.collidepoint(mousePos):
+            return i
+
+    return -1
+
+
+def check_change_item(atkItemSlot, defItemSlot, mousePos):
+    if atkItemSlot.rect.collidepoint(mousePos):
+        return "attack"
+    if defItemSlot.rect.collidepoint(mousePos):
+        return "defence"
 
 
 def update_gameobjects(window: WR.WindowRenderer):
@@ -43,3 +57,6 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple[Objects.G
         # Move items inside the item spots on screen
         item.move(invBackground[i + 3].rect.x + 10, invBackground[i + 3].rect.y + 10)
         item.visible = not item.visible
+
+    player.attackItem.visible = not player.attackItem.visible
+    player.defensiveItem.visible = not player.defensiveItem.visible

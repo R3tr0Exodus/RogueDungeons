@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects, toggle_inv
+from Utility import check_button_press, check_item_select, check_change_item, Layers, update_gameobjects, toggle_inv
 import manager
 
 
@@ -35,8 +35,8 @@ if __name__ == "__main__":
     Jeffrey.baseHealth = 25
     Jeffrey.health = 1
 
-    Jeffrey.add_inventory(Objects.Item(center[0] - 29, center[1] - 12, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
-    Jeffrey.add_inventory(Objects.Item(center[0] - 29, center[1] - 12, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
 
     # Managers
     turnManager = manager.TurnManager(Jeffrey, [], window)
@@ -72,13 +72,22 @@ if __name__ == "__main__":
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    selectedItem = -1
                     buttons = [obj for obj in Objects.GameObject.instancelist
                                if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
 
-                    items = [obj for obj in Objects.GameObject.instancelist
-                             if 'Item' in obj.__class__.__name__]  # Gets  a list of all classes named 'Item'
-
                     check_button_press(buttons, pygame.mouse.get_pos())
+
+                    if selectedItem < -1:
+                        print(f'{selectedItem=}')
+                        if check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'attack':
+                            Jeffrey.set_attack_item(selectedItem)
+                            Jeffrey.get_inventory()[selectedItem].move(attInvSlot.rect.x + 10, attInvSlot.rect.y + 10)
+                        elif check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'defence':
+                            Jeffrey.set_def_item(selectedItem)
+                            Jeffrey.get_inventory()[selectedItem].move(defInvSlot.rect.x + 10, defInvSlot.rect.y + 10)
+
+                    selectedItem = check_item_select(Jeffrey.get_inventory(), pygame.mouse.get_pos())
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
