@@ -57,10 +57,10 @@ class Player(Entity):
 
         self.__inventory: list[Item] = []
         for i in range(0, 11):
-            self.__inventory[i] = Item(0, 'empty', 0)
+            self.__inventory.append(Item(0, 'empty', 0))
 
-        self.attackItem: Item = Item(1, 'bob')
-        self.defensiveItem: Item = Item(2, 'dick')
+        self.attackItem: Item = Item(1, 'bob', 1)
+        self.defensiveItem: Item = Item(2, 'dick', 1)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False
