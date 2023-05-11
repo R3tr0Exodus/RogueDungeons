@@ -1,12 +1,11 @@
 from GameObject import Item
 
 
-'''
-common = [
-    [Item(1, "Hello", 1), Item(2, "There", 1)],
-    [Item(3, "General", 1), Item(4, "Kenobi", 1)]
-]
 
+common = [
+    [Item(0, 0, 10, 0, 0, 'thingy', 0, visible=False)]
+]
+'''
 epic = [
     [Item(5, "WOO!", 1), Item(6, "YEA BABY!", 1)],
     [Item(7, "THAT'S WHAT I'VE WAITING FOR!", 1), Item(8, "THAT'S WHAT ITS ALL ABOUT!", 1)]

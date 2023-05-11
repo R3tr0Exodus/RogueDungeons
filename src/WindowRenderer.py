@@ -8,6 +8,7 @@ class WindowRenderer:
         self.w = width
         self.h = height
         self.__screen = pygame.display.set_mode((self.w, self.h), flags=flags)
+        self.w, self.h = pygame.display.get_surface().get_size()
         self.__backgroundColor = (255, 255, 255)
 
         # Reference to inner class
@@ -32,19 +33,34 @@ class WindowRenderer:
         def sprite(self, sprite: pygame.surface, rect: pygame.rect):
             self.__screen.blit(sprite, rect)
 
+        def text(self, text: str, rect: pygame.rect, font_path="../fonts/VT323-Regular.ttf",
+                 color=(255, 255, 255), size=25):
+            font = pygame.font.Font(font_path, size)
+            txt = font.render(text, True, color)
+            self.__screen.blit(txt, rect)
+
         def background(self, spritePath: str, scale):
             sprite = pygame.image.load(spritePath)
             sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * scale, sprite.get_rect().height * scale))
 
-            spriteSize = sprite.get_rect()
-            blocksX = ceil(self.w / spriteSize.w)
-            blocksY = ceil(self.h / spriteSize.h)
+            sprite_size = sprite.get_rect()
+            blocks_x = ceil(self.w / sprite_size.w)
+            blocks_y = ceil(self.h / sprite_size.h)
 
-            for i in range(0, blocksX):
+            for i in range(0, blocks_x):
                 sprite = pygame.transform.flip(sprite, False, True)
-                for j in range(0, blocksY):
+                for j in range(0, blocks_y):
                     sprite = pygame.transform.flip(sprite, True, False)
-                    self.__screen.blit(sprite, (i * spriteSize.w, j * spriteSize.h, spriteSize.w, spriteSize.h))
+                    self.__screen.blit(sprite, (i * sprite_size.w, j * sprite_size.h, sprite_size.w, sprite_size.h))
+
+        def room(self, manager):
+            room = manager.currentRoom
+            # Draw enemies
+            for enemy in room.enemies:
+                enemy.visible = True
+            # Draw treasure
+            if room.hasTreasure:
+                manager.chestButton.visible = True
 
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)

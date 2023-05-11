@@ -4,16 +4,17 @@ import pygame
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Error_Placeholder.png", visible: bool=True):
-        self.sprite = pygame.image.load(spritePath)
-        self.layer = layer
+    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+                 visible: bool = True):
+        self._sprite = pygame.image.load(spritePath)
+        self._layer = layer
         self.visible = visible
 
-        self.sprite = pygame.transform.scale(self.sprite,
-                                             (self.sprite.get_rect().width * scale,
-                                              self.sprite.get_rect().height * scale))
+        self._sprite = pygame.transform.scale(self._sprite,
+                                              (self._sprite.get_rect().width * scale,
+                                               self._sprite.get_rect().height * scale))
 
-        self.rect = pygame.Rect(xPos * scale, yPos * scale, self.sprite.get_rect().width, self.sprite.get_rect().height)
+        self.rect = pygame.Rect(xPos * scale, yPos * scale, self._sprite.get_rect().width, self._sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
@@ -21,6 +22,21 @@ class GameObject(object):
     def move(self, xPos, yPos):
         self.rect.x = xPos
         self.rect.y = yPos
+
+    @property
+    def sprite(self):
+        return self._sprite
+
+    @property
+    def layer(self):
+        return self._layer
+
+    def remove(self):
+        GameObject.instancelist.remove(self)
+
+    def __del__(self):
+        if self in GameObject.instancelist:
+            self.remove()
 
     def update(self):
         pass
@@ -31,7 +47,7 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, xPos, yPos, scale, layer: int, weight: int, type: str, value: int,
-                 spritePath="../sprites/Error_Placeholder.png", visible: bool=True):
+                 spritePath="../sprites/Jerry_sprite.png", visible: bool=True):
         super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.weight = weight
         self.type = type
@@ -43,23 +59,82 @@ class Buff(GameObject):
 
 
 class Entity(GameObject):
-    def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png", visible=True):
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+                 visible=True):
         super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
+        self.name = name
 
     def take_damage(self, damage):
         self.health -= damage
         if self.health <= 0:
+            self.health = 0
             self.die()
 
     def die(self):
-        print("ouchie!")
+        self.remove()
+
+
+class Enemy(Entity):
+    def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, scale, layer: int,
+                 spritePath="../sprites/Jerry_sprite.png", visible=True):
+        super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
+        self.__debuff: Buff = debuff
+        self.__room = room
+
+    @property
+    def debuff(self):
+        return self.__debuff
+
+    def attack(self, player: Entity):
+        attack_dmg = self.baseDmg
+        player.health -= attack_dmg
+
+    def die(self):
+        self.remove()
+        # Sets the enemy to the back of the list
+        self.__room.enemies.remove(self)
+        self.__room.enemies.append(self)
+
+
+class Skeleton(Enemy):
+    spritePath = "../sprites/Skeleton_sprite.png"
+    baseHealth = 30
+    baseDmg = 2
+    debuff = 10
+
+    def __init__(self, room, xPos, yPos, scale, layer: int):
+        super().__init__("skeleton", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
+
+class Goblin(Enemy):
+    spritePath = "../sprites/Goblin_sprite.png"
+    baseHealth = 20
+    baseDmg = 20
+    debuff = 10
+
+    def __init__(self, room, xPos, yPos, scale, layer: int):
+        super().__init__("goblin", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
+
+
+class Witch(Enemy):
+    spritePath = "../sprites/Goblin_sprite.png"
+    baseHealth = 25
+    baseDmg = 5
+    debuff = 10
+
+    def __init__(self, room, xPos, yPos, scale, layer: int):
+        super().__init__("witch", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+                         self.spritePath, visible=False)
 
 
 class Player(Entity):
-    def __init__(self, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png", visible=True):
-        super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+                 visible=True):
+        super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
         for i in range(12):
@@ -79,8 +154,9 @@ class Player(Entity):
 
     def add_inventory(self, newItem: Item):
         for i, item in enumerate(self.__inventory):
-            if item.type != 'empty':
-                self.__inventory[i] = item
+            if item.type == 'empty':
+                self.__inventory[i] = newItem
+                break
 
     def use_item(self):
         pass
@@ -105,4 +181,4 @@ class UiButton(GameObject):
         self.__buttonFunc = buttonFunc
 
     def on_press(self):
-        self.__buttonFunc()
+            self.__buttonFunc()

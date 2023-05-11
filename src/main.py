@@ -2,68 +2,103 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, check_item_select, check_change_item, Layers, update_gameobjects, toggle_inv
+from Utility import check_button_press, Layers, update_gameobjects, coords, toggle_inv, check_item_select, check_change_item
 import manager
+from manager import DungeonManager, TurnManager
 
 
+# Button functions
 def open_inv():
     print('opened inventory')
 
 
 def start_attack():
-    print('ATTAAACK')
+    if TurnManager.playerToMove:
+        TurnManager.attack_enemy()
 
 
 def continue_dungeon():
-    print('continued in dungeon')
+    if DungeonManager.currentRoom.isCleared:
+        print('continued in dungeon')
+        DungeonManager.advance_dungeon()
+    else:
+        print("!!ACCESS DENIED!!")
 
 
 def use_item():
     print('used item')
 
 
-if __name__ == "__main__":
-    pygame.init()
+def start_main_menu():
+    manager.UI.MainMenu.show()
 
-    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN), 2560, 1440)
-    window.set_background_color(255, 0, 255)
-    centerPX = window.get_center()
-    center = tuple([coord/10 for coord in centerPX])
+    while manager.UI.MainMenu.isShowing:
+        update_gameobjects(window)
+        window.update()
+        for event in pygame.event.get():
+            # Check for QUIT event
+            if event.type == pygame.QUIT:
+                manager.UI.MainMenu.isShowing = False
+                pygame.quit()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    buttons = [obj for obj in Objects.GameObject.instancelist
+                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+
+                    check_button_press(buttons, pygame.mouse.get_pos())
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            manager.UI.MainMenu.isShowing = False
+            pygame.quit()
+    manager.UI.MainMenu.hide()
+
+
+def run_game():
+    running = True
 
     # Entities
-    Jeffrey = Objects.Player(50, 0, center[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
-    Jeffrey.baseHealth = 25
-    Jeffrey.health = 1
+    Jeffrey = Objects.Player("Jeffrey", 50, 10, center[0] - 15, center[1] + 5, 10, Layers.ENTITIES)
+    Jeffrey.baseHealth = 250
+    Jeffrey.health = 250
 
     Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
     Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
 
     # Managers
-    turnManager = manager.TurnManager(Jeffrey, [], window)
+    DungeonManager.init(Jeffrey)
+    DungeonManager.add_rnd_room(10)
+    TurnManager.init(Jeffrey, window)
 
     # UI Elements
-    invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI, '../sprites/Inventroy_backdrop.png', visible=False)
-    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
-    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
+    invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI,
+                                       '../sprites/Inventroy_backdrop.png', visible=False)
+    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+                                    visible=False)
+    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+                                    visible=False)
 
-    # Gen inv slots
     invSlots: list[Objects.GameObject] = []
-    for column in range(3):
-        for row in range(4):
-            invSlots.append(Objects.GameObject(center[0] - 29 + 16 * row, center[1] - 12 + 16 * column, 10, Layers.UI,
-                                          '../sprites/Inventroy_tile_brown.png', visible=False))
+    for row in range(3):
+        for column in range(4):
+            invSlots.append(Objects.GameObject(center[0] - 29 + 16 * column, center[1] - 12 + 16 * row, 10, Layers.UI,
+                                               '../sprites/Inventroy_tile_brown.png', False))
 
     # Buttons
     invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
-                                 center[0] + 40, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
-    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
-    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
+                                 center[0] + 30, coords.RIGHT_BOTTOM[1] - 15, 10, Layers.UI)
+    attButton = Objects.UiButton(start_attack, center[0] - 45, coords.RIGHT_BOTTOM[1] - 15, 10, Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, coords.RIGHT_TOP[1] + 3, 10, Layers.UI)
 
-    running = True
+    selectedItem = 0
+
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
+        window.draw.room(manager.DungeonManager)
         update_gameobjects(window)
-        turnManager.draw_hp(Jeffrey, Jeffrey)
+        TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])
+
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event
@@ -72,7 +107,6 @@ if __name__ == "__main__":
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    selectedItem = -1
                     buttons = [obj for obj in Objects.GameObject.instancelist
                                if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
 
@@ -89,9 +123,21 @@ if __name__ == "__main__":
 
                     selectedItem = check_item_select(Jeffrey.get_inventory(), pygame.mouse.get_pos())
 
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             running = False
 
+
+if __name__ == "__main__":
+    pygame.init()
+
+    window = WindowRenderer((pygame.SHOWN | pygame.FULLSCREEN))
+    window.set_background_color(255, 0, 255)
+    coords.set_coords(window)
+    center = coords.CENTER
+
+    start_main_menu()
+    run_game()
 
 pygame.quit()

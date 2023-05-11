@@ -1,6 +1,23 @@
 import pygame
+import math
 import GameObject as Objects
 import WindowRenderer as WR
+
+
+class coords:
+    CENTER: tuple
+    LEFT_TOP: tuple
+    RIGHT_TOP: tuple
+    LEFT_BOTTOM: tuple
+    RIGHT_BOTTOM: tuple
+
+    @staticmethod
+    def set_coords(window):
+        coords.CENTER = (math.floor(window.get_center()[0] / 10), math.floor(window.get_center()[1] / 10))
+        coords.LEFT_TOP = (0, 0)
+        coords.RIGHT_TOP = (math.floor(window.w / 10), 0)
+        coords.LEFT_BOTTOM = (0, math.floor(window.h / 10))
+        coords.RIGHT_BOTTOM = (math.floor(window.w / 10), math.floor(window.h / 10))
 
 
 class Layers:
@@ -41,7 +58,8 @@ def update_gameobjects(window: WR.WindowRenderer):
             window.draw.gameobject(obj)
 
 
-def toggle_inv(player: Objects.Player, invButton, invBackground: tuple[Objects.GameObject]):
+def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
+    playerInv = player.get_inventory()
     player.usingInv = not player.usingInv
     buttons = [obj for obj in Objects.GameObject.instancelist
                if 'UiButton' in obj.__class__.__name__]
@@ -53,7 +71,7 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple[Objects.G
     for obj in invBackground:
         obj.visible = not obj.visible
 
-    for i, item in enumerate(player.get_inventory()):
+    for i, item in enumerate(playerInv):
         # Move items inside the item spots on screen
         item.move(invBackground[i + 3].rect.x + 10, invBackground[i + 3].rect.y + 10)
         item.visible = not item.visible
