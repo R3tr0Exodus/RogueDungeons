@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects, coords
+from Utility import check_button_press, Layers, update_gameobjects, coords, toggle_inv
 import manager
 from manager import DungeonManager, TurnManager
 
@@ -68,6 +68,14 @@ def run_game():
     DungeonManager.add_rnd_room(10)
     TurnManager.init(Jeffrey, window)
 
+    # UI Elements
+    invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI,
+                                       '../sprites/Inventroy_backdrop.png', visible=False)
+    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+                                    visible=False)
+    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+                                    visible=False)
+
     # Buttons
     invButton = Objects.UiButton(open_inv, center[0] + 300, center[1] + 300, 0.2, Layers.UI)
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 300, 0.2, Layers.UI)
@@ -97,7 +105,6 @@ def run_game():
             running = False
 
 
-# Main
 if __name__ == "__main__":
     pygame.init()
 
@@ -108,6 +115,5 @@ if __name__ == "__main__":
 
     start_main_menu()
     run_game()
-
 
 pygame.quit()

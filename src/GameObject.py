@@ -14,7 +14,7 @@ class GameObject(object):
                                               (self._sprite.get_rect().width * scale,
                                                self._sprite.get_rect().height * scale))
 
-        self.rect = pygame.Rect(xPos, yPos, self._sprite.get_rect().width, self._sprite.get_rect().height)
+        self.rect = pygame.Rect(xPos * scale, yPos * scale, self._sprite.get_rect().width, self._sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
@@ -27,20 +27,24 @@ class GameObject(object):
     def layer(self):
         return self._layer
 
+    def remove(self):
+        GameObject.instancelist.remove(self)
+
+    def __del__(self):
+        self.remove()
+
     def update(self):
         pass
 
     def start(self):
         pass
 
-    def remove(self):
-        GameObject.instancelist.remove(self)
-
 
 class Item(GameObject):
-    def __init__(self, weight: int, name: str):
+    def __init__(self, weight: int, type: str, value: int):
         self.weight = weight
-        self.name = name
+        self.type = type
+        self.value = value
 
 
 class Buff(GameObject):
@@ -126,10 +130,17 @@ class Player(Entity):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
-        self.attackItem: Item
-        self.defensiveItem: Item
+        for i in range(0, 11):
+            self.__inventory.append(Item(0, 'empty', 0))
+
+        self.attackItem: Item = Item(1, 'bob', 1)
+        self.defensiveItem: Item = Item(2, 'dick', 1)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
+        self.usingInv = False
+
+    def update(self):
+        pass
 
     def get_inventory(self):
         return self.__inventory
@@ -139,6 +150,14 @@ class Player(Entity):
 
     def use_item(self):
         pass
+
+    def set_attack_item(self, index):
+        self.__inventory.insert(index, self.attackItem)
+        self.attackItem = self.__inventory.pop(index+1)
+
+    def set_def_item(self, index):
+        self.__inventory.insert(index, self.defensiveItem)
+        self.defensiveItem = self.__inventory.pop(index+1)
 
 
 class UiButton(GameObject):
