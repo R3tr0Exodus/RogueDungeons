@@ -31,7 +31,8 @@ class GameObject(object):
         GameObject.instancelist.remove(self)
 
     def __del__(self):
-        self.remove()
+        if self in GameObject.instancelist:
+            self.remove()
 
     def update(self):
         pass
