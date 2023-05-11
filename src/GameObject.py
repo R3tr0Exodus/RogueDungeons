@@ -4,7 +4,7 @@ import pygame
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Error_Placeholder.png",
+    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
                  visible: bool = True):
         self._sprite = pygame.image.load(spritePath)
         self._layer = layer

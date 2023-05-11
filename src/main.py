@@ -59,7 +59,7 @@ def run_game():
     running = True
 
     # Entities
-    Jeffrey = Objects.Player("Jeffrey", 50, 10, coords.CENTER[0] - 100, center[1] + 100, 10, Layers.ENTITIES)
+    Jeffrey = Objects.Player("Jeffrey", 50, 10, coords.CENTER[0] - 20, center[1] + 10, 10, Layers.ENTITIES)
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
@@ -77,9 +77,9 @@ def run_game():
                                     visible=False)
 
     # Buttons
-    invButton = Objects.UiButton(open_inv, center[0] + 300, center[1] + 300, 0.2, Layers.UI)
-    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 300, 0.2, Layers.UI)
-    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
+    invButton = Objects.UiButton(open_inv, center[0] + 30, coords.RIGHT_BOTTOM[1] - 15, 10, Layers.UI)
+    attButton = Objects.UiButton(start_attack, center[0] - 45, coords.RIGHT_BOTTOM[1] - 15, 10, Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, coords.RIGHT_TOP[1] + 3, 10, Layers.UI)
 
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)

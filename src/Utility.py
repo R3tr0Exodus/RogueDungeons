@@ -13,11 +13,11 @@ class coords:
 
     @staticmethod
     def set_coords(window):
-        coords.CENTER = window.get_center()
+        coords.CENTER = (window.get_center()[0] / 10, window.get_center()[1] / 10)
         coords.LEFT_TOP = (0, 0)
-        coords.RIGHT_TOP = (window.w, 0)
-        coords.LEFT_BOTTOM = (0, window.h)
-        coords.RIGHT_BOTTOM = (window.w, window.h)
+        coords.RIGHT_TOP = (window.w / 10, 0)
+        coords.LEFT_BOTTOM = (0, window.h / 10)
+        coords.RIGHT_BOTTOM = (window.w / 10, window.h / 10)
 
 
 class Layers:

@@ -62,7 +62,8 @@ class DungeonManager:
     @staticmethod
     def add_rnd_room(num: int):
         chest_sprite_path = "../sprites/Chest_sprite.png"
-        DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, 10, 10, 4, Utility.Layers.OBJECTS,
+        DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, coords.CENTER[0]+30, coords.CENTER[1]-20,
+                                                      10, Utility.Layers.OBJECTS,
                                                       chest_sprite_path, False)
         for i in range(num):
             new_room: Room = Room()
@@ -77,11 +78,14 @@ class DungeonManager:
             # Add enemies
             enemy_number = random.uniform(0, 1)
             if enemy_number <= DungeonManager.skeletonPct:
-                new_room.enemies.append(Objects.Skeleton(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Skeleton(new_room, coords.CENTER[0] + 5, coords.CENTER[1] - 20,
+                                                         10, Utility.Layers.ENTITIES))
             elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
-                new_room.enemies.append(Objects.Goblin(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Goblin(new_room, coords.CENTER[0] + 5, coords.CENTER[1] - 20,
+                                                       10, Utility.Layers.ENTITIES))
             else:
-                new_room.enemies.append(Objects.Witch(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Witch(new_room, coords.CENTER[0] + 5, coords.CENTER[1] - 20,
+                                                      10, Utility.Layers.ENTITIES))
 
             DungeonManager.roomList.append(new_room)
         DungeonManager.currentRoom = DungeonManager.roomList[0]
@@ -162,10 +166,10 @@ class TurnManager:
                                                                     health_pct * TurnManager.__pixelSize,
                                                                     2 * TurnManager.__pixelSize))
 
-        left_pos = (coords.LEFT_BOTTOM[0] + 100,
-                    coords.LEFT_BOTTOM[1] - 100)
-        right_pos = (coords.RIGHT_TOP[0] - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
-                     coords.RIGHT_TOP[1] + 4 + 100)
+        left_pos = (coords.LEFT_BOTTOM[0] * 10 + 100,
+                    coords.LEFT_BOTTOM[1] * 10 - 200)
+        right_pos = (coords.RIGHT_TOP[0] * 10 - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
+                     coords.RIGHT_TOP[1] * 10 + 4 + 100)
 
         draw_bar(player, left_pos)
         draw_bar(enemy, right_pos)
@@ -180,9 +184,9 @@ class UI:
         @staticmethod
         def show():
             UI.MainMenu.isShowing = True
-            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 10, coords.CENTER[1]-100, 0.2,
+            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 1, coords.CENTER[1]-10, 10,
                                                        Utility.Layers.UI)
-            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 10, coords.CENTER[1]+100, 0.2,
+            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 1, coords.CENTER[1]+10, 10,
                                                       Utility.Layers.UI)
 
         @staticmethod
