@@ -1,4 +1,5 @@
 import pygame
+from Utility import Layers
 
 
 class GameObject(object):
@@ -18,6 +19,10 @@ class GameObject(object):
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
 
+    def move(self, xPos, yPos):
+        self.rect.x = xPos
+        self.rect.y = yPos
+
     def update(self):
         pass
 
@@ -26,7 +31,9 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    def __init__(self, weight: int, type: str, value: int):
+    def __init__(self, xPos, yPos, scale, layer: int, weight: int, type: str, value: int,
+                 spritePath="../sprites/Error_Placeholder.png", visible: bool=True):
+        super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.weight = weight
         self.type = type
         self.value = value
@@ -56,11 +63,9 @@ class Player(Entity):
         super().__init__(baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
-        for i in range(0, 11):
-            self.__inventory.append(Item(0, 'empty', 0))
 
-        self.attackItem: Item = Item(1, 'bob', 1)
-        self.defensiveItem: Item = Item(2, 'dick', 1)
+        self.attackItem: Item = Item(0, 0, 10, Layers.ITEM, 0, 'empty', 0, visible=False)
+        self.defensiveItem: Item = Item(0, 0, 10, Layers.ITEM, 0, 'empty', 0, visible=False)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False

@@ -5,12 +5,13 @@ from enum import Enum
 
 
 class Layers:
-    UI = 0
-    VFX = 1
-    ENTITIES = 2
-    OBJECTS = 3
-    FOREGROUND = 4
-    BACKGROUND = 5
+    ITEM = 0
+    UI = 1
+    VFX = 2
+    ENTITIES = 3
+    OBJECTS = 4
+    FOREGROUND = 5
+    BACKGROUND = 6
 
 
 def check_button_press(buttons: list[Objects.UiButton], mousePos):
@@ -26,7 +27,7 @@ def update_gameobjects(window: WR.WindowRenderer):
             window.draw.gameobject(obj)
 
 
-def toggle_inv(player, invButton, invBackground: tuple):
+def toggle_inv(player: Objects.Player, invButton, invBackground: tuple[Objects.GameObject]):
     player.usingInv = not player.usingInv
     buttons = [obj for obj in Objects.GameObject.instancelist
                if 'UiButton' in obj.__class__.__name__]
@@ -38,3 +39,7 @@ def toggle_inv(player, invButton, invBackground: tuple):
     for obj in invBackground:
         obj.visible = not obj.visible
 
+    for i, item in enumerate(player.get_inventory()):
+        # Move items inside the item spots on screen
+        item.move(invBackground[i + 3].rect.x + 10, invBackground[i + 3].rect.y + 10)
+        item.visible = not item.visible

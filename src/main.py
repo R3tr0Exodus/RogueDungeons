@@ -35,6 +35,9 @@ if __name__ == "__main__":
     Jeffrey.baseHealth = 25
     Jeffrey.health = 1
 
+    Jeffrey.add_inventory(Objects.Item(center[0] - 29, center[1] - 12, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
+    Jeffrey.add_inventory(Objects.Item(center[0] - 29, center[1] - 12, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
+
     # Managers
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
@@ -56,7 +59,6 @@ if __name__ == "__main__":
     attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
 
-
     running = True
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
@@ -72,6 +74,9 @@ if __name__ == "__main__":
                 if event.button == 1:
                     buttons = [obj for obj in Objects.GameObject.instancelist
                                if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+
+                    items = [obj for obj in Objects.GameObject.instancelist
+                             if 'Item' in obj.__class__.__name__]  # Gets  a list of all classes named 'Item'
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 
