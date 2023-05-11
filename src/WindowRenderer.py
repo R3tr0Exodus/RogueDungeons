@@ -45,6 +45,7 @@ class WindowRenderer:
 
             sprite_size = sprite.get_rect()
             blocks_x = ceil(self.w / sprite_size.w)
+            print(f"w = {self.w}\t\tblocks_x = {blocks_x}\t\tsprite_x = {sprite_size.w}")
             blocks_y = ceil(self.h / sprite_size.h)
 
             for i in range(0, blocks_x):

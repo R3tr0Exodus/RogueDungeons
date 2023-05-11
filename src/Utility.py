@@ -1,4 +1,5 @@
 import pygame
+import math
 import GameObject as Objects
 import WindowRenderer as WR
 from enum import Enum
@@ -13,11 +14,11 @@ class coords:
 
     @staticmethod
     def set_coords(window):
-        coords.CENTER = (window.get_center()[0] / 10, window.get_center()[1] / 10)
+        coords.CENTER = (math.floor(window.get_center()[0] / 10), math.floor(window.get_center()[1] / 10))
         coords.LEFT_TOP = (0, 0)
-        coords.RIGHT_TOP = (window.w / 10, 0)
-        coords.LEFT_BOTTOM = (0, window.h / 10)
-        coords.RIGHT_BOTTOM = (window.w / 10, window.h / 10)
+        coords.RIGHT_TOP = (math.floor(window.w / 10), 0)
+        coords.LEFT_BOTTOM = (0, math.floor(window.h / 10))
+        coords.RIGHT_BOTTOM = (math.floor(window.w / 10), math.floor(window.h / 10))
 
 
 class Layers:

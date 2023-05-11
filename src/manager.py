@@ -106,7 +106,7 @@ class TurnManager:
     playerToMove: bool = True
 
     # Healthbar
-    __pixelSize = 7
+    __pixelSize = 10
     __barPixelLength = 52
     __healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
     __healthBarSprite = pygame.transform.scale(__healthBarSprite,

@@ -59,7 +59,7 @@ def run_game():
     running = True
 
     # Entities
-    Jeffrey = Objects.Player("Jeffrey", 50, 10, coords.CENTER[0] - 20, center[1] + 10, 10, Layers.ENTITIES)
+    Jeffrey = Objects.Player("Jeffrey", 50, 10, coords.CENTER[0] - 15, center[1] + 5, 10, Layers.ENTITIES)
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
