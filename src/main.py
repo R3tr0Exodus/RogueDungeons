@@ -38,15 +38,24 @@ if __name__ == "__main__":
     # Managers
     turnManager = manager.TurnManager(Jeffrey, [], window)
 
-    # Buttons
-    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, (invBackground, attInvSlot, defInvSlot)), center[0] + 40, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
-    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
-    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
-
     # UI Elements
     invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI, '../sprites/Inventroy_backdrop.png', visible=False)
     attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
     defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png', visible=False)
+
+    # Gen inv slots
+    invSlots: list[Objects.GameObject] = []
+    for column in range(3):
+        for row in range(4):
+            invSlots.append(Objects.GameObject(center[0] - 29 + 16 * row, center[1] - 12 + 16 * column, 10, Layers.UI,
+                                          '../sprites/Inventroy_tile_brown.png', visible=False))
+
+    # Buttons
+    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
+                                 center[0] + 40, center[1] + 16, 10, Layers.UI, "../sprites/Backpack.png")
+    attButton = Objects.UiButton(start_attack, center[0] - 450, center[1] + 200, 0.2, Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 75, center[1] - 300, 0.2, Layers.UI)
+
 
     running = True
     while running:
