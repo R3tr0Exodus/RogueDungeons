@@ -2,7 +2,8 @@ import pygame
 from pygame.locals import *
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects, coords, toggle_inv, check_item_select, check_change_item
+from Utility import check_button_press, Layers, update_gameobjects, coords, toggle_inv, check_item_select,\
+                    check_change_item, update_InvPos
 import manager
 from manager import DungeonManager, TurnManager
 
@@ -65,7 +66,7 @@ def run_game():
 
     Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
     Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
-
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', False))
     # Managers
     DungeonManager.init(Jeffrey)
     DungeonManager.add_rnd_room(10)
@@ -92,7 +93,7 @@ def run_game():
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, coords.RIGHT_TOP[1] + 3, 10, Layers.UI)
 
     selectedItem = 0
-
+    update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
     while running:
         window.draw.background('../sprites/Cobble_Wall.png', 10)
         window.draw.room(manager.DungeonManager)
@@ -112,14 +113,15 @@ def run_game():
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 
-                    if selectedItem < -1:
+                    if selectedItem != -1:
                         print(f'{selectedItem=}')
                         if check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'attack':
                             Jeffrey.set_attack_item(selectedItem)
-                            Jeffrey.get_inventory()[selectedItem].move(attInvSlot.rect.x + 10, attInvSlot.rect.y + 10)
+                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+
                         elif check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'defence':
                             Jeffrey.set_def_item(selectedItem)
-                            Jeffrey.get_inventory()[selectedItem].move(defInvSlot.rect.x + 10, defInvSlot.rect.y + 10)
+                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
                     selectedItem = check_item_select(Jeffrey.get_inventory(), pygame.mouse.get_pos())
 

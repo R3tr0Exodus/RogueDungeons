@@ -58,6 +58,16 @@ def update_gameobjects(window: WR.WindowRenderer):
             window.draw.gameobject(obj)
 
 
+def update_InvPos(player: Objects.Player, InvPos: list[Objects.GameObject]):
+    inventory = player.get_inventory()
+
+    for i, item in enumerate(inventory):
+        item.move(InvPos[i + 2].rect.x + 10, InvPos[i + 2].rect.y + 10)
+
+    player.attackItem.move(InvPos[0].rect.x + 10, InvPos[0].rect.y + 10)
+    player.defensiveItem.move(InvPos[1].rect.x + 10, InvPos[1].rect.y + 10)
+
+
 def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
     playerInv = player.get_inventory()
     player.usingInv = not player.usingInv
@@ -73,7 +83,6 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
 
     for i, item in enumerate(playerInv):
         # Move items inside the item spots on screen
-        item.move(invBackground[i + 3].rect.x + 10, invBackground[i + 3].rect.y + 10)
         item.visible = not item.visible
 
     player.attackItem.visible = not player.attackItem.visible
