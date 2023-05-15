@@ -55,15 +55,6 @@ class WindowRenderer:
                     sprite = pygame.transform.flip(sprite, True, False)
                     self.__screen.blit(sprite, (i * sprite_size.w, j * sprite_size.h, sprite_size.w, sprite_size.h))
 
-        def room(self, manager):
-            room = manager.currentRoom
-            # Draw enemies
-            for enemy in room.enemies:
-                enemy.visible = True
-            # Draw treasure
-            if room.hasTreasure:
-                manager.chestButton.visible = True
-
     def set_background_color(self, r, g, b):
         self.__backgroundColor = (r, g, b)
 
