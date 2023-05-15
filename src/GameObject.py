@@ -6,9 +6,12 @@ SCALE = 10
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
-                 visible: bool = True):
-        self._sprite = pygame.image.load(spritePath)
+    def __init__(self, xPos, yPos, layer: int, spritePath, visible: bool = True):
+        if spritePath is None:
+            self._sprite = pygame.image.load('../sprites/Entity/Jerry_sprite.png')
+        else:
+            self._sprite = pygame.image.load(spritePath)
+
         self._layer = layer
         self.visible = visible
 
@@ -50,7 +53,7 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, weight: int, itemType: str, value: int,
-                 spritePath="../sprites/Entity/Jerry_sprite.png", visible: bool = False):
+                 spritePath=None, visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
         self.type = itemType
@@ -63,7 +66,7 @@ class Buff(GameObject):
 
 class Entity(GameObject):
     def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
-                 spritePath="../sprites/Entity/Jerry_sprite.png", visible=True):
+                 spritePath=None, visible=True):
         super().__init__(xPos, yPos, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
@@ -81,7 +84,7 @@ class Entity(GameObject):
 
 class Enemy(Entity):
     def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, layer: int,
-                 spritePath="../sprites/EntityJerry_sprite.png", visible=True):
+                 spritePath=None, visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
         self.__debuff: Buff = debuff
         self.__room = room
@@ -136,7 +139,7 @@ class Witch(Enemy):
 
 class Player(Entity):
     def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
-                 spritePath="../sprites/Entity/Jerry_sprite.png", visible=True):
+                 spritePath=None, visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
@@ -176,11 +179,7 @@ class Player(Entity):
 class UiButton(GameObject):
 
     def __init__(self, buttonFunc, xPos, yPos, layer: int, sprite=None, visible=True):
-        if sprite is None:
-            super().__init__(xPos, yPos, layer, visible=visible)
-        else:
-            super().__init__(xPos, yPos, layer, sprite, visible)
-
+        super().__init__(xPos, yPos, layer, sprite, visible)
         self.__buttonFunc = buttonFunc
 
     def on_press(self):
