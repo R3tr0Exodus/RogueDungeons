@@ -246,7 +246,7 @@ class UI:
             self.__screen.draw.room(DungeonManager)
             Utility.update_gameobjects(self.__screen)
             self.__screen.draw.rect(self.color, self.rect)
-            self.__screen.draw.text(self.txt, self.rect, True)
+            self.__screen.draw.text(self.txt, self.rect, True, size=128)
             self.__screen.update()
 
 
