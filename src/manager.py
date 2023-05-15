@@ -93,7 +93,10 @@ class DungeonManager:
 
     @staticmethod
     def loot():
-        pass
+        loot = [LootTables.common, LootTables.epic, LootTables.legendary, LootTables.ascended]
+        rarity = random.choice(loot)
+        DungeonManager.player.add_item(random.choice(rarity))
+        DungeonManager.chestButton.visible = False
 
 
 class TurnManager:

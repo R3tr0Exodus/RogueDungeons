@@ -83,12 +83,12 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
 
     for button in buttons:
         if button != invButton:
-            button.visible = not button.visible
+            button.visible = not player.usingInv
 
     for obj in invBackground:
         obj.visible = not obj.visible
 
-    for i, item in enumerate(playerInv):
+    for item in playerInv:
         # Move items inside the item spots on screen
         item.visible = not item.visible
 
