@@ -1,43 +1,40 @@
 from GameObject import Item
 from Utility import ItemType
 
-'''
-Item name		    ItemType    Power	    Type
-Jeffrey On Stick 	2 		    77	        Ascended
-Sword			    2		    8	        Common
-Dirt Block		    2		    32	        Legendary
-Holy Mace		    2		    57	        Ascended
-Ice pike		    2		    28	        Epic
-Teddy Bear		    2		    7	        Common
-Poison Armor		3		    31	        Epic
-Holy Armor		    3		    61	        Ascended
-Jeffrey on shield	3		    77	        Ascended
-Nokia			    3		    78	        Ascended
-Mace			    2		    25	        Epic
-Wooden Club		    2		    9	        Common
-Leather			    3		    12	        Common
-'''
+
 
 useables = [
 
 ]
 
 common = [
-    Item(2, ItemType.DEFENCE, 11, '../sprites/Item/Defence/Cursed_Armor.png'),
-    Item(2, ItemType.ATTACK, 14, '../sprites/Item/Attack/Cleaver.png'),
+    Item(2, ItemType.DEFENCE, 22, '../sprites/Item/Defence/Cursed_Armor.png'),
+    Item(1, ItemType.ATTACK, 23, '../sprites/Item/Attack/Cleaver.png'),
+    Item(1, ItemType.DEFENCE, 25, '../sprites/Item/Attack/ItemHere(Sword)'),
+    Item(2, ItemType.DEFENCE, 22, '../Sprites/Item/Defence/ItemHere(Leather)'),
+    Item(1, ItemType.ATTACK, 26, '../sprites/Item/Attack/ItemHere(WoodenClub)'),
+    Item(1, ItemType.ATTACK, 27, '../sprites/Item/Attack,ItemHere(TeddyBear)')
 ]
 
 epic = [
-    Item(4, ItemType.ATTACK, 21, '../sprites/Item/Attack/Cleaver_Poison.png'),
-    Item(3, ItemType.DEFENCE, 19, '../sprites/Item/Defence/Cursed_Armor_2.png'),
+    Item(1, ItemType.ATTACK, 31, '../sprites/Item/Attack/Cleaver_Poison.png'),
+    Item(2, ItemType.DEFENCE, 37, '../sprites/Item/Defence/Cursed_Armor_2.png'),
+    Item(1, ItemType.ATTACK, 32, '../sprites/Item/Attack/ItemHere(Mace)'),
+    Item(1, ItemType.ATTACK, 39, '../sprites/Item/Attack/ItemHere(IcePike)'),
+    Item(2, ItemType.DEFENCE, 35, '../sprites/Item/Defence/ItemHere(PoisonArmor)')
 ]
 
 legendary = [
-    Item(6, ItemType.DEFENCE, 27, '../sprites/Item/Defence/Cursed_Armor_3.png'),
+    Item(2, ItemType.DEFENCE, 44, '../sprites/Item/Defence/Cursed_Armor_3.png'),
+    Item(2, ItemType.DEFENCE, 45, '../sprites/Item/Defence/ItemHere(Nokia)'),
+    Item(1, ItemType.ATTACK, 42, '../sprites/Item/Attack/ItemHere(DirtBlock)'),
+    Item(1, ItemType.ATTACK, 51, '../sprites/Item/Attack/ItemHere(HolyMace)'),
+    Item(2, ItemType.DEFENCE, 49, '../sprites/Item/Defence/ItemHere(HolyArmor)')
 
 ]
 
 ascended = [
-    Item(9, ItemType.DEFENCE, 48, '../sprites/Item/Defence/Cursed_Armor_4.png'),
-
+    Item(2, ItemType.DEFENCE, 48, '../sprites/Item/Defence/Cursed_Armor_4.png'),
+    Item(1, ItemType.ATTACK, 62, '../sprites/Item/Attack/ItemHere(JeffreyStick)'),
+    Item(2, ItemType.DEFENCE, 65, '../sprites/Item/Defence/ItemHere(JeffreyShield)')
 ]
