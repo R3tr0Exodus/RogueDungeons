@@ -115,14 +115,12 @@ def run_game():
 
                     if selectedItem != -1:
                         slotPressed = check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos())
-                        print(f'{selectedItem=}, {slotPressed=}')
+
                         if slotPressed == 'attack' and Jeffrey.get_inventory()[selectedItem].type == 'attack':
-                            print('Changed attack item')
                             Jeffrey.set_attack_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
                         elif slotPressed == 'defence' and Jeffrey.get_inventory()[selectedItem].type == 'defence':
-                            print('Changed defence item')
                             Jeffrey.set_def_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
