@@ -90,7 +90,7 @@ def run_game():
     # Buttons
     invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton,
                                                     tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
-                                 center[0] + 30, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
+                                 center[0] + 30, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI, '../sprites/Button/Backpack.png')
     attButton = Objects.UiButton(start_attack, center[0] - 45, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, Layers.UI)
 

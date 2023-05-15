@@ -55,7 +55,7 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, weight: int, itemType: int, power: int,
-                 spritePath: str=None, visible: bool = False):
+                 spritePath: str='../sprites/Item/Empty_Item.png', visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
         self.itemType = itemType

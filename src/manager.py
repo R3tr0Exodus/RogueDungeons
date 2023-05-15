@@ -5,7 +5,7 @@ import pygame
 import random
 import LootTables
 import Utility
-from Utility import coords
+from Utility import Coords
 import time
 
 
@@ -93,7 +93,7 @@ class DungeonManager:
 
     @staticmethod
     def loot():
-        print(f'looted {len(DungeonManager.currentRoom.loot)} item(s)')
+        pass
 
 
 class TurnManager:
@@ -242,7 +242,7 @@ class UI:
                 print('asdf')
                 self.isRunning = False
 
-            self.__screen.draw.background('../sprites/Cobble_Wall.png', 10)
+            self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
             self.__screen.draw.room(DungeonManager)
             Utility.update_gameobjects(self.__screen)
             self.__screen.draw.rect(self.color, self.rect)
