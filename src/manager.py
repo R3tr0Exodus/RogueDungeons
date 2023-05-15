@@ -223,9 +223,7 @@ class UI:
             self.isRunning = True
 
         def update(self):
-            print(f'{self.index}')
             if not self.isRunning:
-                print(f'{self.isRunning=}')
                 return
 
             if self.index < self.steps or self.hasRunFunc:
@@ -239,7 +237,6 @@ class UI:
                 time.sleep(self.holdSec)
 
             if self.index >= self.steps * 2:
-                print('asdf')
                 self.isRunning = False
 
             self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png', 10)

@@ -163,7 +163,7 @@ class Player(Entity):
     def get_inventory(self):
         return self.__inventory
 
-    def add_inventory(self, newItem: Item):
+    def add_item(self, newItem: Item):
         for i, item in enumerate(self.__inventory):
             # itemType 0 is an empty slot
             if item.itemType == 0:

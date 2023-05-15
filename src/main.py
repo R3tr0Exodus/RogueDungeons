@@ -65,9 +65,9 @@ def run_game():
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
-    Jeffrey.add_inventory(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
-    Jeffrey.add_inventory(Objects.Item(0, ItemType.DEFENCE, 100, '../sprites/Item/Defence/Temp_Shield.png', False))
-    Jeffrey.add_inventory(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
+    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
+    Jeffrey.add_item(Objects.Item(0, ItemType.DEFENCE, 100, '../sprites/Item/Defence/Temp_Shield.png', False))
+    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
     # Managers
     DungeonManager.init(Jeffrey)
     DungeonManager.add_rnd_room(10)
