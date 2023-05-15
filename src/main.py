@@ -59,7 +59,7 @@ def run_game():
     running = True
 
     # Entities
-    Jeffrey = Objects.Player("Jeffrey", 50, 10, center[0] - 15, center[1] + 5, 10, Layers.ENTITIES)
+    Jeffrey = Objects.Player("Jeffrey", 50, 10, center[0] - 15, center[1] + 5, Layers.ENTITIES)
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
@@ -73,11 +73,11 @@ def run_game():
 
     # UI Elements
     invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, Layers.UI,
-                                       '../sprites/UI/Inventroy_backdrop.png', visible=False)
+                                       '../sprites/UI/Inventroy_backdrop.png', False)
     attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, Layers.UI, '../sprites/UI/Inventroy_tile_gold.png',
-                                    visible=False)
+                                    False)
     defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, Layers.UI, '../sprites/UI/Inventroy_tile_gold.png',
-                                    visible=False)
+                                    False)
 
     invSlots: list[Objects.GameObject] = []
     for row in range(3):
@@ -89,8 +89,8 @@ def run_game():
     invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton,
                                                     tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
                                  center[0] + 30, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
-    attButton = Objects.UiButton(start_attack, center[0] - 45, Coords.RIGHT_BOTTOM[1] - 15, 10, Layers.UI)
-    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, 10, Layers.UI)
+    attButton = Objects.UiButton(start_attack, center[0] - 45, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
+    nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, Layers.UI)
 
     selectedItem = 0
     update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)

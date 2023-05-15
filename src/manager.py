@@ -183,9 +183,9 @@ class UI:
         @staticmethod
         def show():
             UI.MainMenu.isShowing = True
-            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 1, Coords.CENTER[1] - 10, 10,
+            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 1, Coords.CENTER[1] - 10,
                                                        Utility.Layers.UI)
-            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 1, Coords.CENTER[1] + 10, 10,
+            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 1, Coords.CENTER[1] + 10,
                                                       Utility.Layers.UI)
 
         @staticmethod

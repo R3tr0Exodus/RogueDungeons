@@ -1,13 +1,12 @@
 import pygame
 
-SCALE = 10
-
 
 class GameObject(object):
+    scale = 10
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, layer: int, spritePath, visible: bool = True):
-        if spritePath is None:
+    def __init__(self, xPos, yPos, layer: int, spritePath: str, visible: bool = True):
+        if spritePath == None:
             self._sprite = pygame.image.load('../sprites/Entity/Jerry_sprite.png')
         else:
             self._sprite = pygame.image.load(spritePath)
@@ -16,10 +15,10 @@ class GameObject(object):
         self.visible = visible
 
         self._sprite = pygame.transform.scale(self._sprite,
-                                              (self._sprite.get_rect().width * SCALE,
-                                               self._sprite.get_rect().height * SCALE))
+                                              (self._sprite.get_rect().width * GameObject.scale,
+                                               self._sprite.get_rect().height * GameObject.scale))
 
-        self.rect = pygame.Rect(xPos * SCALE, yPos * SCALE,
+        self.rect = pygame.Rect(xPos * GameObject.scale, yPos * GameObject.scale,
                                 self._sprite.get_rect().width, self._sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
@@ -53,7 +52,7 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, weight: int, itemType: str, value: int,
-                 spritePath=None, visible: bool = False):
+                 spritePath: str=None, visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
         self.type = itemType
@@ -66,7 +65,7 @@ class Buff(GameObject):
 
 class Entity(GameObject):
     def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
-                 spritePath=None, visible=True):
+                 spritePath: str=None, visible=True):
         super().__init__(xPos, yPos, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
@@ -84,7 +83,7 @@ class Entity(GameObject):
 
 class Enemy(Entity):
     def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, layer: int,
-                 spritePath=None, visible=True):
+                 spritePath: str=None, visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
         self.__debuff: Buff = debuff
         self.__room = room
@@ -139,7 +138,7 @@ class Witch(Enemy):
 
 class Player(Entity):
     def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
-                 spritePath=None, visible=True):
+                 spritePath: str=None, visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
@@ -178,7 +177,7 @@ class Player(Entity):
 
 class UiButton(GameObject):
 
-    def __init__(self, buttonFunc, xPos, yPos, layer: int, sprite=None, visible=True):
+    def __init__(self, buttonFunc, xPos, yPos, layer: int, sprite: str=None, visible=True):
         super().__init__(xPos, yPos, layer, sprite, visible)
         self.__buttonFunc = buttonFunc
 
