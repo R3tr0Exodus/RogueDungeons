@@ -33,10 +33,12 @@ class WindowRenderer:
         def sprite(self, sprite: pygame.surface, rect: pygame.rect):
             self.__screen.blit(sprite, rect)
 
-        def text(self, text: str, rect: pygame.rect, font_path="../fonts/VT323-Regular.ttf",
+        def text(self, text: str, rect: pygame.rect, centered=False, font_path="../fonts/VT323-Regular.ttf",
                  color=(255, 255, 255), size=25):
             font = pygame.font.Font(font_path, size)
             txt = font.render(text, True, color)
+            if centered:
+                rect = txt.get_rect(center=(self.w/2, self.h/2))
             self.__screen.blit(txt, rect)
 
         def background(self, spritePath: str, scale):

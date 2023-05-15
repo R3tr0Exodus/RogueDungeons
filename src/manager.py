@@ -6,6 +6,7 @@ import random
 import LootTables
 import Utility
 from Utility import coords
+import time
 
 
 class Room:
@@ -61,8 +62,9 @@ class DungeonManager:
 
     @staticmethod
     def add_rnd_room(num: int):
-        chest_sprite_path = "../sprites/Chest_sprite.png"
-        DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, 10, 10, 4, Utility.Layers.OBJECTS,
+        chest_sprite_path = "../sprites/Misc/Chest_sprite.png"
+        DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, Coords.CENTER[0] + 30, Coords.CENTER[1] - 20,
+                                                      Utility.Layers.OBJECTS,
                                                       chest_sprite_path, False)
         for i in range(num):
             new_room: Room = Room()
@@ -77,11 +79,14 @@ class DungeonManager:
             # Add enemies
             enemy_number = random.uniform(0, 1)
             if enemy_number <= DungeonManager.skeletonPct:
-                new_room.enemies.append(Objects.Skeleton(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Skeleton(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
+                                                         Utility.Layers.ENTITIES))
             elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
-                new_room.enemies.append(Objects.Goblin(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Goblin(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
+                                                       Utility.Layers.ENTITIES))
             else:
-                new_room.enemies.append(Objects.Witch(new_room, 10, 10, 10, Utility.Layers.ENTITIES))
+                new_room.enemies.append(Objects.Witch(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
+                                                      Utility.Layers.ENTITIES))
 
             DungeonManager.roomList.append(new_room)
         DungeonManager.currentRoom = DungeonManager.roomList[0]
@@ -102,9 +107,9 @@ class TurnManager:
     playerToMove: bool = True
 
     # Healthbar
-    __pixelSize = 7
+    __pixelSize = 10
     __barPixelLength = 52
-    __healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
+    __healthBarSprite = pygame.image.load("../sprites/UI/HealthBar_sprite.png")
     __healthBarSprite = pygame.transform.scale(__healthBarSprite,
                                                (__barPixelLength * __pixelSize,
                                                 4 * __pixelSize))
@@ -131,17 +136,16 @@ class TurnManager:
     @staticmethod
     def attack_player():
         for enemy in DungeonManager.currentRoom.enemies:
-            enemy.attack(TurnManager.player)
+            TurnManager.player.take_damage(enemy.dmg)
         TurnManager.next_turn()
 
     @staticmethod
     def attack_enemy():
         if DungeonManager.currentRoom.enemies[0].health >= 1:
             current_enemy: Objects.Enemy = DungeonManager.currentRoom.enemies[0]
-            player_dmg = DungeonManager.player.baseDmg
+            player_dmg = DungeonManager.player.dmg
             current_enemy.take_damage(player_dmg)
             TurnManager.next_turn()
-
 
     @staticmethod
     def draw_hp(player: GameObject.Player, enemy: GameObject.Entity):
@@ -151,8 +155,8 @@ class TurnManager:
             text = f"{entity.name}: {entity.health} / {entity.baseHealth}"
 
             # bar
-            TurnManager.__screen.draw.sprite(TurnManager.__healthBarSprite, pygame.Rect(pos[0], pos[1],
-                                                                          TurnManager.__barPixelLength, 4))
+            TurnManager.__screen.draw.sprite(TurnManager.__healthBarSprite,
+                                             pygame.Rect(pos[0], pos[1], TurnManager.__barPixelLength, 4))
             text_rect = pygame.Rect(pos[0], pos[1] - 30, TurnManager.__barPixelLength, 4)
             TurnManager.__screen.draw.text(text, text_rect)
 
@@ -162,10 +166,10 @@ class TurnManager:
                                                                     health_pct * TurnManager.__pixelSize,
                                                                     2 * TurnManager.__pixelSize))
 
-        left_pos = (coords.LEFT_BOTTOM[0] + 100,
-                    coords.LEFT_BOTTOM[1] - 100)
-        right_pos = (coords.RIGHT_TOP[0] - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
-                     coords.RIGHT_TOP[1] + 4 + 100)
+        left_pos = (Coords.LEFT_BOTTOM[0] * 10 + 100,
+                    Coords.LEFT_BOTTOM[1] * 10 - 200)
+        right_pos = (Coords.RIGHT_TOP[0] * 10 - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
+                     Coords.RIGHT_TOP[1] * 10 + 4 + 100)
 
         draw_bar(player, left_pos)
         draw_bar(enemy, right_pos)
@@ -180,9 +184,9 @@ class UI:
         @staticmethod
         def show():
             UI.MainMenu.isShowing = True
-            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 10, coords.CENTER[1]-100, 0.2,
+            UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 1, Coords.CENTER[1] - 10,
                                                        Utility.Layers.UI)
-            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 10, coords.CENTER[1]+100, 0.2,
+            UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 1, Coords.CENTER[1] + 10,
                                                       Utility.Layers.UI)
 
         @staticmethod
@@ -198,4 +202,52 @@ class UI:
         @staticmethod
         def quit_game():
             pygame.quit()
+
+    class Transition:
+        def __init__(self, screen: WindowRenderer, hold: float, text: str, func, start=False):
+            self.holdSec = hold
+            self.txt = text
+            self.func = func
+            self.isRunning = start
+            self.steps = 5
+            self.index = 0
+            self.hasRunFunc = False
+
+            self.__screen = screen
+
+            # Square
+            self.rect = pygame.Rect(-screen.w, 0, screen.w, screen.h)
+            self.color = (10, 10, 10)
+
+        def start(self):
+            self.isRunning = True
+
+        def update(self):
+            print(f'{self.index}')
+            if not self.isRunning:
+                print(f'{self.isRunning=}')
+                return
+
+            if self.index < self.steps or self.hasRunFunc:
+                self.index += 1
+                self.rect.x += self.__screen.w / self.steps
+
+            elif self.index == self.steps:
+                self.func()
+                self.hasRunFunc = True
+                self.index += 1
+                time.sleep(self.holdSec)
+
+            if self.index >= self.steps * 2:
+                print('asdf')
+                self.isRunning = False
+
+            self.__screen.draw.background('../sprites/Cobble_Wall.png', 10)
+            self.__screen.draw.room(DungeonManager)
+            Utility.update_gameobjects(self.__screen)
+            self.__screen.draw.rect(self.color, self.rect)
+            self.__screen.draw.text(self.txt, self.rect, True)
+            self.__screen.update()
+
+
 
