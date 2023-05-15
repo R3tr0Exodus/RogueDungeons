@@ -1,17 +1,7 @@
-# custom
-RougeDungeons.iml
-misc.xml
-.idea
-.idea/
-/.idea/
-
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 *.py[cod]
 *$py.class
-.idea/
-/.idea/
-.idea
 
 # C extensions
 *.so
