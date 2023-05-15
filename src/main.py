@@ -97,7 +97,6 @@ def run_game():
     update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
     while running:
         window.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
-        window.draw.room(Manager.DungeonManager)
 
         TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])
 
