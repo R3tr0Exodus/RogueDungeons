@@ -12,6 +12,8 @@ class GameObject(object):
         else:
             self._sprite = pygame.image.load(spritePath)
 
+        # spritePath variable necessary for copying
+        self._spritePath = spritePath
         self._layer = layer
         self.visible = visible
 
@@ -25,7 +27,7 @@ class GameObject(object):
         GameObject.instanceList.append(self)
         GameObject.instanceList.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
 
-    def move(self, xPos, yPos):
+    def move_pos(self, xPos, yPos):
         self.rect.x = xPos
         self.rect.y = yPos
 
@@ -53,11 +55,14 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, weight: int, itemType: int, power: int,
-                 spritePath: str='../sprites/Item/Empty_Item.png', visible: bool = False):
+                 spritePath: str = '../sprites/Item/Empty_Item.png', visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
         self.itemType = itemType
         self.power = power
+
+    def __copy__(self):
+        return Item(self.weight, self.itemType, self.power, self._spritePath, self.visible)
 
 
 class Buff(GameObject):

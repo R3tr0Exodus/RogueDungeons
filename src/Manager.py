@@ -4,9 +4,9 @@ from WindowRenderer import WindowRenderer
 import pygame
 import random
 import LootTables
-import Utility
-from Utility import Coords
+from Utility import Coords, Layers, update_gameobjects
 import time
+import copy
 
 
 class Room:
@@ -64,7 +64,7 @@ class DungeonManager:
     def add_rnd_room(num: int):
         chest_sprite_path = "../sprites/Misc/Chest_sprite.png"
         DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, Coords.CENTER[0] + 30, Coords.CENTER[1] - 20,
-                                                      Utility.Layers.OBJECTS,
+                                                      Layers.OBJECTS,
                                                       chest_sprite_path, False)
         for i in range(num):
             new_room: Room = Room()
@@ -80,20 +80,23 @@ class DungeonManager:
             enemy_number = random.uniform(0, 1)
             if enemy_number <= DungeonManager.skeletonPct:
                 new_room.enemies.append(Objects.Skeleton(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
-                                                         Utility.Layers.ENTITIES))
+                                                         Layers.ENTITIES))
             elif enemy_number <= sum([DungeonManager.skeletonPct, DungeonManager.goblinPct]):
                 new_room.enemies.append(Objects.Goblin(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
-                                                       Utility.Layers.ENTITIES))
+                                                       Layers.ENTITIES))
             else:
                 new_room.enemies.append(Objects.Witch(new_room, Coords.CENTER[0] + 5, Coords.CENTER[1] - 20,
-                                                      Utility.Layers.ENTITIES))
+                                                      Layers.ENTITIES))
 
             DungeonManager.roomList.append(new_room)
         DungeonManager.currentRoom = DungeonManager.roomList[0]
 
     @staticmethod
     def loot():
-        pass
+        loot = [LootTables.common, LootTables.epic, LootTables.legendary, LootTables.ascended]
+        rarity = random.choice(loot)
+        DungeonManager.player.add_item(copy.copy(random.choice(rarity)))
+        DungeonManager.chestButton.visible = False
 
 
 class TurnManager:
@@ -185,9 +188,9 @@ class UI:
         def show():
             UI.MainMenu.isShowing = True
             UI.MainMenu.startButton = Objects.UiButton(UI.MainMenu.start_game, 1, Coords.CENTER[1] - 10,
-                                                       Utility.Layers.UI)
+                                                       Layers.UI)
             UI.MainMenu.quitButton = Objects.UiButton(UI.MainMenu.quit_game, 1, Coords.CENTER[1] + 10,
-                                                      Utility.Layers.UI)
+                                                      Layers.UI)
 
         @staticmethod
         def hide():
@@ -241,7 +244,7 @@ class UI:
 
             self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
             self.__screen.draw.room(DungeonManager)
-            Utility.update_gameobjects(self.__screen)
+            update_gameobjects(self.__screen)
             self.__screen.draw.rect(self.color, self.rect)
             self.__screen.draw.text(self.txt, self.rect, True, size=128)
             self.__screen.update()
