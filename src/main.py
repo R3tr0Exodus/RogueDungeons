@@ -108,8 +108,7 @@ def run_game():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    buttons = [obj for obj in Objects.GameObject.instancelist
-                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+                    buttons = Objects.GameObject.buttonList
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 

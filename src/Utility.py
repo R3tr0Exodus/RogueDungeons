@@ -29,6 +29,14 @@ class Layers:
     BACKGROUND = 6
 
 
+class ItemType:
+    EMPTY = 0
+    ATTACK = 1
+    DEFENCE = 2
+    POTION = 3
+    TRASH = 4
+
+
 def check_button_press(buttons: list[Objects.UiButton], mousePos):
     for button in buttons:
         if button.rect.collidepoint(mousePos) and button.visible:

@@ -4,6 +4,7 @@ import pygame
 class GameObject(object):
     scale = 10
     instancelist = []  # keep track of all gameobjects
+    buttonList = []  # Keep track of all buttons
 
     def __init__(self, xPos, yPos, layer: int, spritePath: str, visible: bool = True):
         if spritePath == None:
@@ -51,12 +52,12 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    def __init__(self, weight: int, itemType: str, value: int,
+    def __init__(self, weight: int, itemType: str, power: int,
                  spritePath: str=None, visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
         self.type = itemType
-        self.value = value
+        self.value = power
 
 
 class Buff(GameObject):
@@ -180,6 +181,7 @@ class UiButton(GameObject):
     def __init__(self, buttonFunc, xPos, yPos, layer: int, sprite: str=None, visible=True):
         super().__init__(xPos, yPos, layer, sprite, visible)
         self.__buttonFunc = buttonFunc
+        GameObject.buttonList.append(self)
 
     def on_press(self):
         self.__buttonFunc()
