@@ -64,9 +64,9 @@ def run_game():
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
-    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', visible=False))
-    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Shield', 0, '../sprites/Temp_Shield.png', visible=False))
-    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'Sword', 0, '../sprites/Temp_Sword.png', False))
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'attack', 0, '../sprites/Item/Attack/Temp_Sword.png', visible=False))
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'defence', 0, '../sprites/Item/Defence/Temp_Shield.png', visible=False))
+    Jeffrey.add_inventory(Objects.Item(0, 0, 10, Layers.ITEM, 0, 'attack', 0, '../sprites/Item/Attack/Temp_Sword.png', False))
     # Managers
     DungeonManager.init(Jeffrey)
     DungeonManager.add_rnd_room(10)
@@ -74,17 +74,17 @@ def run_game():
 
     # UI Elements
     invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, 10, Layers.UI,
-                                       '../sprites/Inventroy_backdrop.png', visible=False)
-    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+                                       '../sprites/UI/Inventroy_backdrop.png', visible=False)
+    attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, 10, Layers.UI, '../sprites/UI/Inventroy_tile_gold.png',
                                     visible=False)
-    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/Inventroy_tile_gold.png',
+    defInvSlot = Objects.GameObject(center[0] + 10, center[1] - 28, 10, Layers.UI, '../sprites/UI/Inventroy_tile_gold.png',
                                     visible=False)
 
     invSlots: list[Objects.GameObject] = []
     for row in range(3):
         for column in range(4):
             invSlots.append(Objects.GameObject(center[0] - 29 + 16 * column, center[1] - 12 + 16 * row, 10, Layers.UI,
-                                               '../sprites/Inventroy_tile_brown.png', False))
+                                               '../sprites/UI/Inventroy_tile_brown.png', False))
 
     # Buttons
     invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton, tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
@@ -95,7 +95,7 @@ def run_game():
     selectedItem = 0
     update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
     while running:
-        window.draw.background('../sprites/Cobble_Wall.png', 10)
+        window.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
         window.draw.room(manager.DungeonManager)
         update_gameobjects(window)
         TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])
@@ -114,12 +114,15 @@ def run_game():
                     check_button_press(buttons, pygame.mouse.get_pos())
 
                     if selectedItem != -1:
-                        print(f'{selectedItem=}')
-                        if check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'attack':
+                        slotPressed = check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos())
+                        print(f'{selectedItem=}, {slotPressed=}')
+                        if slotPressed == 'attack' and Jeffrey.get_inventory()[selectedItem].type == 'attack':
+                            print('Changed attack item')
                             Jeffrey.set_attack_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
-                        elif check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos()) == 'defence':
+                        elif slotPressed == 'defence' and Jeffrey.get_inventory()[selectedItem].type == 'defence':
+                            print('Changed defence item')
                             Jeffrey.set_def_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 

@@ -4,7 +4,7 @@ import pygame
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
                  visible: bool = True):
         self._sprite = pygame.image.load(spritePath)
         self._layer = layer
@@ -47,7 +47,7 @@ class GameObject(object):
 
 class Item(GameObject):
     def __init__(self, xPos, yPos, scale, layer: int, weight: int, type: str, value: int,
-                 spritePath="../sprites/Jerry_sprite.png", visible: bool=True):
+                 spritePath="../sprites/Entity/Jerry_sprite.png", visible: bool=True):
         super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.weight = weight
         self.type = type
@@ -59,7 +59,7 @@ class Buff(GameObject):
 
 
 class Entity(GameObject):
-    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
                  visible=True):
         super().__init__(xPos, yPos, scale, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
@@ -78,7 +78,7 @@ class Entity(GameObject):
 
 class Enemy(Entity):
     def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, scale, layer: int,
-                 spritePath="../sprites/Jerry_sprite.png", visible=True):
+                 spritePath="../sprites/EntityJerry_sprite.png", visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
         self.__debuff: Buff = debuff
         self.__room = room
@@ -99,7 +99,7 @@ class Enemy(Entity):
 
 
 class Skeleton(Enemy):
-    spritePath = "../sprites/Skeleton_sprite.png"
+    spritePath = "../sprites/Entity/Skeleton_sprite.png"
     baseHealth = 30
     baseDmg = 2
     debuff = 10
@@ -110,7 +110,7 @@ class Skeleton(Enemy):
 
 
 class Goblin(Enemy):
-    spritePath = "../sprites/Goblin_sprite.png"
+    spritePath = "../sprites/Entity/Goblin_sprite.png"
     baseHealth = 20
     baseDmg = 20
     debuff = 10
@@ -121,7 +121,7 @@ class Goblin(Enemy):
 
 
 class Witch(Enemy):
-    spritePath = "../sprites/Goblin_sprite.png"
+    spritePath = "../sprites/Entity/Goblin_sprite.png"
     baseHealth = 25
     baseDmg = 5
     debuff = 10
@@ -132,7 +132,7 @@ class Witch(Enemy):
 
 
 class Player(Entity):
-    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Jerry_sprite.png",
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
                  visible=True):
         super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
 

@@ -61,7 +61,7 @@ class DungeonManager:
 
     @staticmethod
     def add_rnd_room(num: int):
-        chest_sprite_path = "../sprites/Chest_sprite.png"
+        chest_sprite_path = "../sprites/Misc/Chest_sprite.png"
         DungeonManager.chestButton = Objects.UiButton(DungeonManager.loot, coords.CENTER[0]+30, coords.CENTER[1]-20,
                                                       10, Utility.Layers.OBJECTS,
                                                       chest_sprite_path, False)
@@ -108,7 +108,7 @@ class TurnManager:
     # Healthbar
     __pixelSize = 10
     __barPixelLength = 52
-    __healthBarSprite = pygame.image.load("../sprites/HealthBar_sprite.png")
+    __healthBarSprite = pygame.image.load("../sprites/UI/HealthBar_sprite.png")
     __healthBarSprite = pygame.transform.scale(__healthBarSprite,
                                                (__barPixelLength * __pixelSize,
                                                 4 * __pixelSize))
