@@ -53,9 +53,9 @@ def check_item_select(inventory: list[Objects.Item], mousePos):
 
 def check_change_item(atkItemSlot, defItemSlot, mousePos):
     if atkItemSlot.rect.collidepoint(mousePos):
-        return "attack"
+        return ItemType.ATTACK
     if defItemSlot.rect.collidepoint(mousePos):
-        return "defence"
+        return ItemType.DEFENCE
 
 
 def update_gameobjects(window: WR.WindowRenderer):

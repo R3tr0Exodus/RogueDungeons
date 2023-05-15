@@ -1,8 +1,7 @@
 import pygame
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
-from Utility import check_button_press, Layers, update_gameobjects, Coords, toggle_inv, check_item_select,\
-                    check_change_item, update_InvPos
+from Utility import *
 import manager
 from manager import DungeonManager, TurnManager
 
@@ -115,11 +114,11 @@ def run_game():
                     if selectedItem != -1:
                         slotPressed = check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos())
 
-                        if slotPressed == 'attack' and Jeffrey.get_inventory()[selectedItem].type == 'attack':
+                        if slotPressed == ItemType.ATTACK and Jeffrey.get_inventory()[selectedItem].type == ItemType.ATTACK:
                             Jeffrey.set_attack_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
-                        elif slotPressed == 'defence' and Jeffrey.get_inventory()[selectedItem].type == 'defence':
+                        elif slotPressed == ItemType.DEFENCE and Jeffrey.get_inventory()[selectedItem].type == ItemType.DEFENCE:
                             Jeffrey.set_def_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
