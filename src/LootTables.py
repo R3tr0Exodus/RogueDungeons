@@ -1,16 +1,22 @@
 from GameObject import Item
+from Utility import ItemType
 
 common = [
-    [Item(0, 'thingy', 0, visible=False)]
+    Item(3, ItemType.DEFENCE, 11, '../sprites/Item/Defence/Cursed_Armor.png'),
+    Item(2, ItemType.ATTACK, 24, '../sprites/Item/Attack/Cleaver.png'),
 ]
-'''
+
 epic = [
-    [Item(5, "WOO!", 1), Item(6, "YEA BABY!", 1)],
-    [Item(7, "THAT'S WHAT I'VE WAITING FOR!", 1), Item(8, "THAT'S WHAT ITS ALL ABOUT!", 1)]
+    Item(2, ItemType.ATTACK, 21, '../sprites/Item/Attack/Cleaver_Poison.png'),
+    Item(3, ItemType.DEFENCE, 19, '../sprites/Item/Defence/Cursed_Armor2.png'),
 ]
 
 legendary = [
-    [Item(9, "I like to", 1), Item(10, "Move it move it", 1)],
-    [Item(11, "He likes to", 1), Item(12, "Move it move it", 1)]
+    Item(3, ItemType.DEFENCE, 27, '../sprites/Items/Defence/Cursed_Armor3.png'),
+
 ]
-'''
+
+ascended = [
+    Item(3, ItemType.DEFENCE, 48, '../sprites/Items/Defence/Cursed_Armor4.png'),
+
+]
