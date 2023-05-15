@@ -1,13 +1,15 @@
+import math
+
 import pygame
 
 
 class GameObject(object):
     scale = 10
-    instancelist = []  # keep track of all gameobjects
+    instanceList = []  # keep track of all gameobjects
     buttonList = []  # Keep track of all buttons
 
     def __init__(self, xPos, yPos, layer: int, spritePath: str, visible: bool = True):
-        if spritePath == None:
+        if spritePath is None:
             self._sprite = pygame.image.load('../sprites/Entity/Jerry_sprite.png')
         else:
             self._sprite = pygame.image.load(spritePath)
@@ -22,8 +24,8 @@ class GameObject(object):
         self.rect = pygame.Rect(xPos * GameObject.scale, yPos * GameObject.scale,
                                 self._sprite.get_rect().width, self._sprite.get_rect().height)
 
-        GameObject.instancelist.append(self)
-        GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
+        GameObject.instanceList.append(self)
+        GameObject.instanceList.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
 
     def move(self, xPos, yPos):
         self.rect.x = xPos
@@ -38,10 +40,10 @@ class GameObject(object):
         return self._layer
 
     def remove(self):
-        GameObject.instancelist.remove(self)
+        GameObject.instanceList.remove(self)
 
     def __del__(self):
-        if self in GameObject.instancelist:
+        if self in GameObject.instanceList:
             self.remove()
 
     def update(self):
@@ -56,8 +58,8 @@ class Item(GameObject):
                  spritePath: str=None, visible: bool = False):
         super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
-        self.type = itemType
-        self.value = power
+        self.itemType = itemType
+        self.power = power
 
 
 class Buff(GameObject):
@@ -70,10 +72,11 @@ class Entity(GameObject):
         super().__init__(xPos, yPos, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
+        self.armor = 0
         self.name = name
 
     def take_damage(self, damage):
-        self.health -= damage
+        self.health -= round(damage - self.armor/100 * damage)
         if self.health <= 0:
             self.health = 0
             self.die()
@@ -93,10 +96,6 @@ class Enemy(Entity):
     def debuff(self):
         return self.__debuff
 
-    def attack(self, player: Entity):
-        attack_dmg = self.baseDmg
-        player.health -= attack_dmg
-
     def die(self):
         self.remove()
         # Sets the enemy to the back of the list
@@ -113,6 +112,8 @@ class Skeleton(Enemy):
     def __init__(self, room, xPos, yPos, layer: int):
         super().__init__("skeleton", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
+        self.dmg = Skeleton.baseDmg
+        self.health = Skeleton.baseHealth
 
 
 class Goblin(Enemy):
@@ -124,6 +125,8 @@ class Goblin(Enemy):
     def __init__(self, room, xPos, yPos, layer: int):
         super().__init__("goblin", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
+        self.health = Goblin.baseHealth
+        self.dmg = Goblin.baseDmg
 
 
 class Witch(Enemy):
@@ -135,6 +138,8 @@ class Witch(Enemy):
     def __init__(self, room, xPos, yPos, layer: int):
         super().__init__("witch", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
+        self.health = Witch.baseHealth
+        self.dmg = Witch.baseDmg
 
 
 class Player(Entity):
@@ -144,10 +149,10 @@ class Player(Entity):
 
         self.__inventory: list[Item] = []
         for i in range(12):
-            self.__inventory.append(Item(0, 'empty', 0, visible=False))
+            self.__inventory.append(Item(0, 0, 0, visible=False))
 
-        self.attackItem: Item = Item(0, 'empty', 0, visible=False)
-        self.defensiveItem: Item = Item(0, 'empty', 0, visible=False)
+        self.attackItem: Item = Item(0, 0, 0, visible=False)
+        self.defensiveItem: Item = Item(0, 0, 0, visible=False)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False
@@ -160,7 +165,8 @@ class Player(Entity):
 
     def add_inventory(self, newItem: Item):
         for i, item in enumerate(self.__inventory):
-            if item.type == 'empty':
+            # itemType 0 is an empty slot
+            if item.itemType == 0:
                 self.__inventory[i] = newItem
                 break
 
@@ -171,9 +177,17 @@ class Player(Entity):
         self.__inventory.insert(index, self.attackItem)
         self.attackItem = self.__inventory.pop(index+1)
 
+        # Update attack stat
+        self.dmg = self.baseDmg + self.attackItem.power
+        print(f'{self.dmg=}')
+
     def set_def_item(self, index):
         self.__inventory.insert(index, self.defensiveItem)
         self.defensiveItem = self.__inventory.pop(index+1)
+
+        # Update defence stat
+        self.armor = self.defensiveItem.power
+        print(f'{self.armor=}')
 
 
 class UiButton(GameObject):
