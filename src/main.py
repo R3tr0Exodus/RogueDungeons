@@ -95,7 +95,7 @@ def run_game():
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, Layers.UI)
 
     selectedItem = 0
-    update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+    update_inv_pos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
     while running:
         window.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
         window.draw.room(manager.DungeonManager)
@@ -119,11 +119,11 @@ def run_game():
 
                         if slotPressed == ItemType.ATTACK and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.ATTACK:
                             Jeffrey.set_attack_item(selectedItem)
-                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+                            update_inv_pos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
                         elif slotPressed == ItemType.DEFENCE and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.DEFENCE:
                             Jeffrey.set_def_item(selectedItem)
-                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+                            update_inv_pos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
                     selectedItem = check_item_select(Jeffrey.get_inventory(), pygame.mouse.get_pos())
 

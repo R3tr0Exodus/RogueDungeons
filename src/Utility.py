@@ -1,5 +1,6 @@
 import math
 import GameObject as Objects
+import manager
 import WindowRenderer as WR
 
 
@@ -65,7 +66,7 @@ def update_gameobjects(window: WR.WindowRenderer):
             window.draw.gameobject(obj)
 
 
-def update_InvPos(player: Objects.Player, InvPos: list[Objects.GameObject]):
+def update_inv_pos(player: Objects.Player, InvPos: list[Objects.GameObject]):
     inventory = player.get_inventory()
 
     for i, item in enumerate(inventory):
@@ -78,11 +79,10 @@ def update_InvPos(player: Objects.Player, InvPos: list[Objects.GameObject]):
 def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
     playerInv = player.get_inventory()
     player.usingInv = not player.usingInv
-    buttons = [obj for obj in Objects.GameObject.instanceList
-               if 'UiButton' in obj.__class__.__name__]
+    buttons = Objects.GameObject.buttonList
 
     for button in buttons:
-        if button != invButton:
+        if button != invButton or button != manager.DungeonManager.chestButton:
             button.visible = not button.visible
 
     for obj in invBackground:
@@ -94,6 +94,3 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
 
     player.attackItem.visible = not player.attackItem.visible
     player.defensiveItem.visible = not player.defensiveItem.visible
-
-
-
