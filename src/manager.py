@@ -5,7 +5,8 @@ import pygame
 import random
 import LootTables
 import Utility
-from Utility import Coords
+from Utility import coords
+import time
 
 
 class Room:
@@ -201,3 +202,52 @@ class UI:
         @staticmethod
         def quit_game():
             pygame.quit()
+
+    class Transition:
+        def __init__(self, screen: WindowRenderer, hold: float, text: str, func, start=False):
+            self.holdSec = hold
+            self.txt = text
+            self.func = func
+            self.isRunning = start
+            self.steps = 5
+            self.index = 0
+            self.hasRunFunc = False
+
+            self.__screen = screen
+
+            # Square
+            self.rect = pygame.Rect(-screen.w, 0, screen.w, screen.h)
+            self.color = (10, 10, 10)
+
+        def start(self):
+            self.isRunning = True
+
+        def update(self):
+            print(f'{self.index}')
+            if not self.isRunning:
+                print(f'{self.isRunning=}')
+                return
+
+            if self.index < self.steps or self.hasRunFunc:
+                self.index += 1
+                self.rect.x += self.__screen.w / self.steps
+
+            elif self.index == self.steps:
+                self.func()
+                self.hasRunFunc = True
+                self.index += 1
+                time.sleep(self.holdSec)
+
+            if self.index >= self.steps * 2:
+                print('asdf')
+                self.isRunning = False
+
+            self.__screen.draw.background('../sprites/Cobble_Wall.png', 10)
+            self.__screen.draw.room(DungeonManager)
+            Utility.update_gameobjects(self.__screen)
+            self.__screen.draw.rect(self.color, self.rect)
+            self.__screen.draw.text(self.txt, self.rect, True)
+            self.__screen.update()
+
+
+

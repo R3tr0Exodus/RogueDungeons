@@ -3,7 +3,7 @@ import GameObject as Objects
 from WindowRenderer import WindowRenderer
 from Utility import *
 import manager
-from manager import DungeonManager, TurnManager
+from manager import DungeonManager, TurnManager, UI
 
 
 # Button functions
@@ -18,8 +18,11 @@ def start_attack():
 
 def continue_dungeon():
     if DungeonManager.currentRoom.isCleared:
+        transition = UI.Transition(window, 1, f"Lvl: {DungeonManager.roomIndex+2}", DungeonManager.advance_dungeon,
+                                   True)
+        while transition.isRunning:
+            transition.update()
         print('continued in dungeon')
-        DungeonManager.advance_dungeon()
     else:
         print("!!ACCESS DENIED!!")
 
@@ -141,3 +144,9 @@ if __name__ == "__main__":
     run_game()
 
 pygame.quit()
+
+
+name = "Magnus"
+val = 0
+for char in name:
+    val += ord(char)

@@ -94,3 +94,6 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
 
     player.attackItem.visible = not player.attackItem.visible
     player.defensiveItem.visible = not player.defensiveItem.visible
+
+
+
