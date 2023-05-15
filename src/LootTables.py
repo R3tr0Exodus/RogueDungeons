@@ -1,9 +1,7 @@
 from GameObject import Item
 
-
-
 common = [
-    [Item(0, 0, 10, 0, 0, 'thingy', 0, visible=False)]
+    [Item(0, 'thingy', 0, visible=False)]
 ]
 '''
 epic = [

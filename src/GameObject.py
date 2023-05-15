@@ -1,20 +1,23 @@
 import pygame
 
+SCALE = 10
+
 
 class GameObject(object):
     instancelist = []  # keep track of all gameobjects
 
-    def __init__(self, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
+    def __init__(self, xPos, yPos, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
                  visible: bool = True):
         self._sprite = pygame.image.load(spritePath)
         self._layer = layer
         self.visible = visible
 
         self._sprite = pygame.transform.scale(self._sprite,
-                                              (self._sprite.get_rect().width * scale,
-                                               self._sprite.get_rect().height * scale))
+                                              (self._sprite.get_rect().width * SCALE,
+                                               self._sprite.get_rect().height * SCALE))
 
-        self.rect = pygame.Rect(xPos * scale, yPos * scale, self._sprite.get_rect().width, self._sprite.get_rect().height)
+        self.rect = pygame.Rect(xPos * SCALE, yPos * SCALE,
+                                self._sprite.get_rect().width, self._sprite.get_rect().height)
 
         GameObject.instancelist.append(self)
         GameObject.instancelist.sort(key=lambda gameOBJ: gameOBJ.layer, reverse=True)
@@ -46,11 +49,11 @@ class GameObject(object):
 
 
 class Item(GameObject):
-    def __init__(self, xPos, yPos, scale, layer: int, weight: int, type: str, value: int,
-                 spritePath="../sprites/Entity/Jerry_sprite.png", visible: bool=True):
-        super().__init__(xPos, yPos, scale, layer, spritePath, visible)
+    def __init__(self, weight: int, itemType: str, value: int,
+                 spritePath="../sprites/Entity/Jerry_sprite.png", visible: bool = False):
+        super().__init__(0, 0, 0, spritePath, visible)
         self.weight = weight
-        self.type = type
+        self.type = itemType
         self.value = value
 
 
@@ -59,9 +62,9 @@ class Buff(GameObject):
 
 
 class Entity(GameObject):
-    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
-                 visible=True):
-        super().__init__(xPos, yPos, scale, layer, spritePath, visible)
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
+                 spritePath="../sprites/Entity/Jerry_sprite.png", visible=True):
+        super().__init__(xPos, yPos, layer, spritePath, visible)
         self.health = self.baseHealth = baseHealth
         self.dmg = self.baseDmg = baseDmg
         self.name = name
@@ -77,9 +80,9 @@ class Entity(GameObject):
 
 
 class Enemy(Entity):
-    def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, scale, layer: int,
+    def __init__(self, name: str, room, baseHealth, baseDmg, debuff, xPos, yPos, layer: int,
                  spritePath="../sprites/EntityJerry_sprite.png", visible=True):
-        super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
+        super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
         self.__debuff: Buff = debuff
         self.__room = room
 
@@ -104,8 +107,8 @@ class Skeleton(Enemy):
     baseDmg = 2
     debuff = 10
 
-    def __init__(self, room, xPos, yPos, scale, layer: int):
-        super().__init__("skeleton", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+    def __init__(self, room, xPos, yPos, layer: int):
+        super().__init__("skeleton", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
 
 
@@ -115,8 +118,8 @@ class Goblin(Enemy):
     baseDmg = 20
     debuff = 10
 
-    def __init__(self, room, xPos, yPos, scale, layer: int):
-        super().__init__("goblin", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+    def __init__(self, room, xPos, yPos, layer: int):
+        super().__init__("goblin", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
 
 
@@ -126,22 +129,22 @@ class Witch(Enemy):
     baseDmg = 5
     debuff = 10
 
-    def __init__(self, room, xPos, yPos, scale, layer: int):
-        super().__init__("witch", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, scale, layer,
+    def __init__(self, room, xPos, yPos, layer: int):
+        super().__init__("witch", room, self.baseHealth, self.baseDmg, self.debuff, xPos, yPos, layer,
                          self.spritePath, visible=False)
 
 
 class Player(Entity):
-    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, scale, layer: int, spritePath="../sprites/Entity/Jerry_sprite.png",
-                 visible=True):
-        super().__init__(name, baseHealth, baseDmg, xPos, yPos, scale, layer, spritePath, visible)
+    def __init__(self, name: str, baseHealth, baseDmg, xPos, yPos, layer: int,
+                 spritePath="../sprites/Entity/Jerry_sprite.png", visible=True):
+        super().__init__(name, baseHealth, baseDmg, xPos, yPos, layer, spritePath, visible)
 
         self.__inventory: list[Item] = []
         for i in range(12):
-            self.__inventory.append(Item(0, 0, 10, 0, 0, 'empty', 0, visible=False))
+            self.__inventory.append(Item(0, 'empty', 0, visible=False))
 
-        self.attackItem: Item = Item(0, 0, 10, 0, 0, 'empty', 0, visible=False)
-        self.defensiveItem: Item = Item(0, 0, 10, 0, 0, 'empty', 0, visible=False)
+        self.attackItem: Item = Item(0, 'empty', 0, visible=False)
+        self.defensiveItem: Item = Item(0, 'empty', 0, visible=False)
         self.attackBuffs: list[Buff]
         self.defensiveBuffs: list[Buff]
         self.usingInv = False
@@ -172,13 +175,13 @@ class Player(Entity):
 
 class UiButton(GameObject):
 
-    def __init__(self, buttonFunc, xPos, yPos, scale, layer: int, sprite=None, visible=True):
+    def __init__(self, buttonFunc, xPos, yPos, layer: int, sprite=None, visible=True):
         if sprite is None:
-            super().__init__(xPos, yPos, scale, layer, visible=visible)
+            super().__init__(xPos, yPos, layer, visible=visible)
         else:
-            super().__init__(xPos, yPos, scale, layer, sprite, visible)
+            super().__init__(xPos, yPos, layer, sprite, visible)
 
         self.__buttonFunc = buttonFunc
 
     def on_press(self):
-            self.__buttonFunc()
+        self.__buttonFunc()
