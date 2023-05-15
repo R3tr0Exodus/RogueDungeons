@@ -144,9 +144,3 @@ if __name__ == "__main__":
     run_game()
 
 pygame.quit()
-
-
-name = "Magnus"
-val = 0
-for char in name:
-    val += ord(char)
