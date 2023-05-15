@@ -43,8 +43,8 @@ def check_button_press(buttons: list[Objects.UiButton], mousePos):
             button.on_press()
 
 
-def check_item_select(inventory: list[Objects.Item], mousePos):
-    for i, item in enumerate(inventory):
+def check_item_select(invSlots: list[Objects.GameObject], mousePos):
+    for i, item in enumerate(invSlots):
         if item.rect.collidepoint(mousePos):
             return i
 
@@ -65,27 +65,26 @@ def update_gameobjects(window: WR.WindowRenderer):
             window.draw.gameobject(obj)
 
 
-def update_InvPos(player: Objects.Player, InvPos: list[Objects.GameObject]):
+def update_inv_pos(player: Objects.Player, attPos, defPos, InvPos: list[Objects.GameObject]):
     inventory = player.get_inventory()
 
     for i, item in enumerate(inventory):
-        item.move(InvPos[i + 2].rect.x + 10, InvPos[i + 2].rect.y + 10)
+        item.move_pos(InvPos[i].rect.x + 10, InvPos[i].rect.y + 10)
 
-    player.attackItem.move(InvPos[0].rect.x + 10, InvPos[0].rect.y + 10)
-    player.defensiveItem.move(InvPos[1].rect.x + 10, InvPos[1].rect.y + 10)
+    player.attackItem.move_pos(attPos.rect.x + 10, attPos.rect.y + 10)
+    player.defensiveItem.move_pos(defPos.rect.x + 10, defPos.rect.y + 10)
 
 
-def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
+def toggle_inv(player: Objects.Player, invElems: list[Objects.GameObject], ignoredElems: list[Objects.GameObject]):
     playerInv = player.get_inventory()
     player.usingInv = not player.usingInv
-    buttons = [obj for obj in Objects.GameObject.instanceList
-               if 'UiButton' in obj.__class__.__name__]
+    buttons = Objects.GameObject.buttonList
 
     for button in buttons:
-        if button != invButton:
-            button.visible = not player.usingInv
+        if button not in ignoredElems:
+            button.visible = not button.visible
 
-    for obj in invBackground:
+    for obj in invElems:
         obj.visible = not obj.visible
 
     for item in playerInv:
@@ -94,6 +93,3 @@ def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
 
     player.attackItem.visible = not player.attackItem.visible
     player.defensiveItem.visible = not player.defensiveItem.visible
-
-
-

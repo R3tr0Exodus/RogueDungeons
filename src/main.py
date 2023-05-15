@@ -2,8 +2,8 @@ import pygame
 import GameObject as Objects
 from WindowRenderer import WindowRenderer
 from Utility import *
-import manager
-from manager import DungeonManager, TurnManager, UI
+import Manager
+from Manager import DungeonManager, TurnManager, UI
 
 
 # Button functions
@@ -32,29 +32,28 @@ def use_item():
 
 
 def start_main_menu():
-    manager.UI.MainMenu.show()
+    Manager.UI.MainMenu.show()
 
-    while manager.UI.MainMenu.isShowing:
+    while Manager.UI.MainMenu.isShowing:
         update_gameobjects(window)
         window.update()
         for event in pygame.event.get():
             # Check for QUIT event
             if event.type == pygame.QUIT:
-                manager.UI.MainMenu.isShowing = False
+                Manager.UI.MainMenu.isShowing = False
                 pygame.quit()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    buttons = [obj for obj in Objects.GameObject.instanceList
-                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+                    buttons = Objects.GameObject.buttonList
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
-            manager.UI.MainMenu.isShowing = False
+            Manager.UI.MainMenu.isShowing = False
             pygame.quit()
-    manager.UI.MainMenu.hide()
+    Manager.UI.MainMenu.hide()
 
 
 def run_game():
@@ -88,19 +87,21 @@ def run_game():
                                                '../sprites/UI/Inventroy_tile_brown.png', False))
 
     # Buttons
-    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, invButton,
-                                                    tuple([invBackground, attInvSlot, defInvSlot] + invSlots)),
+    invButton = Objects.UiButton(lambda: toggle_inv(Jeffrey, [invBackground, attInvSlot, defInvSlot] + invSlots,
+                                                    [invButton, DungeonManager.chestButton]),
                                  center[0] + 40, Coords.RIGHT_BOTTOM[1] - 20, Layers.UI, '../sprites/Button/Backpack.png')
     attButton = Objects.UiButton(start_attack, center[0] - 45, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, Layers.UI)
 
     selectedItem = 0
-    update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+    update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
     while running:
         window.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
-        window.draw.room(manager.DungeonManager)
-        update_gameobjects(window)
+        window.draw.room(Manager.DungeonManager)
+
         TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])
+
+        update_gameobjects(window)
 
         window.update()
         for event in pygame.event.get():
@@ -111,7 +112,6 @@ def run_game():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     buttons = Objects.GameObject.buttonList
-
                     check_button_press(buttons, pygame.mouse.get_pos())
 
                     if selectedItem != -1:
@@ -119,11 +119,11 @@ def run_game():
 
                         if slotPressed == ItemType.ATTACK and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.ATTACK:
                             Jeffrey.set_attack_item(selectedItem)
-                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+                            update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
 
                         elif slotPressed == ItemType.DEFENCE and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.DEFENCE:
                             Jeffrey.set_def_item(selectedItem)
-                            update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
+                            update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
 
                     selectedItem = check_item_select(Jeffrey.get_inventory(), pygame.mouse.get_pos())
 
