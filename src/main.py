@@ -45,8 +45,7 @@ def start_main_menu():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    buttons = [obj for obj in Objects.GameObject.instanceList
-                               if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
+                    buttons = Objects.GameObject.buttonList
 
                     check_button_press(buttons, pygame.mouse.get_pos())
 
@@ -54,6 +53,7 @@ def start_main_menu():
         if keys[pygame.K_ESCAPE]:
             manager.UI.MainMenu.isShowing = False
             pygame.quit()
+
     manager.UI.MainMenu.hide()
 
 
