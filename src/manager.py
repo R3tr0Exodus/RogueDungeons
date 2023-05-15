@@ -135,14 +135,14 @@ class TurnManager:
     @staticmethod
     def attack_player():
         for enemy in DungeonManager.currentRoom.enemies:
-            enemy.attack(TurnManager.player)
+            TurnManager.player.take_damage(enemy.dmg)
         TurnManager.next_turn()
 
     @staticmethod
     def attack_enemy():
         if DungeonManager.currentRoom.enemies[0].health >= 1:
             current_enemy: Objects.Enemy = DungeonManager.currentRoom.enemies[0]
-            player_dmg = DungeonManager.player.baseDmg
+            player_dmg = DungeonManager.player.dmg
             current_enemy.take_damage(player_dmg)
             TurnManager.next_turn()
 

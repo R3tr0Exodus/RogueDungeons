@@ -34,7 +34,7 @@ class ItemType:
     ATTACK = 1
     DEFENCE = 2
     POTION = 3
-    TRASH = 4
+    TRASH = 99
 
 
 def check_button_press(buttons: list[Objects.UiButton], mousePos):
@@ -59,7 +59,7 @@ def check_change_item(atkItemSlot, defItemSlot, mousePos):
 
 
 def update_gameobjects(window: WR.WindowRenderer):
-    for obj in Objects.GameObject.instancelist:
+    for obj in Objects.GameObject.instanceList:
         obj.update()
         if obj.visible:
             window.draw.gameobject(obj)
@@ -78,7 +78,7 @@ def update_InvPos(player: Objects.Player, InvPos: list[Objects.GameObject]):
 def toggle_inv(player: Objects.Player, invButton, invBackground: tuple):
     playerInv = player.get_inventory()
     player.usingInv = not player.usingInv
-    buttons = [obj for obj in Objects.GameObject.instancelist
+    buttons = [obj for obj in Objects.GameObject.instanceList
                if 'UiButton' in obj.__class__.__name__]
 
     for button in buttons:

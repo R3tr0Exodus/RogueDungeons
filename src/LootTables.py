@@ -18,22 +18,26 @@ Wooden Club		    2		    9	        Common
 Leather			    3		    12	        Common
 '''
 
+useables = [
+
+]
+
 common = [
-    Item(3, ItemType.DEFENCE, 11, '../sprites/Item/Defence/Cursed_Armor.png'),
-    Item(2, ItemType.ATTACK, 24, '../sprites/Item/Attack/Cleaver.png'),
+    Item(2, ItemType.DEFENCE, 11, '../sprites/Item/Defence/Cursed_Armor.png'),
+    Item(2, ItemType.ATTACK, 14, '../sprites/Item/Attack/Cleaver.png'),
 ]
 
 epic = [
-    Item(2, ItemType.ATTACK, 21, '../sprites/Item/Attack/Cleaver_Poison.png'),
-    Item(3, ItemType.DEFENCE, 19, '../sprites/Item/Defence/Cursed_Armor2.png'),
+    Item(4, ItemType.ATTACK, 21, '../sprites/Item/Attack/Cleaver_Poison.png'),
+    Item(3, ItemType.DEFENCE, 19, '../sprites/Item/Defence/Cursed_Armor_2.png'),
 ]
 
 legendary = [
-    Item(3, ItemType.DEFENCE, 27, '../sprites/Items/Defence/Cursed_Armor3.png'),
+    Item(6, ItemType.DEFENCE, 27, '../sprites/Item/Defence/Cursed_Armor_3.png'),
 
 ]
 
 ascended = [
-    Item(3, ItemType.DEFENCE, 48, '../sprites/Items/Defence/Cursed_Armor4.png'),
+    Item(9, ItemType.DEFENCE, 48, '../sprites/Item/Defence/Cursed_Armor_4.png'),
 
 ]

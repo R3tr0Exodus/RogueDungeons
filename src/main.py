@@ -42,7 +42,7 @@ def start_main_menu():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    buttons = [obj for obj in Objects.GameObject.instancelist
+                    buttons = [obj for obj in Objects.GameObject.instanceList
                                if 'UiButton' in obj.__class__.__name__]  # gets a list of all classes named 'UiButton'
 
                     check_button_press(buttons, pygame.mouse.get_pos())
@@ -62,9 +62,9 @@ def run_game():
     Jeffrey.baseHealth = 250
     Jeffrey.health = 250
 
-    Jeffrey.add_inventory(Objects.Item(0, 'attack', 0, '../sprites/Item/Attack/Temp_Sword.png', False))
-    Jeffrey.add_inventory(Objects.Item(0, 'defence', 0, '../sprites/Item/Defence/Temp_Shield.png', False))
-    Jeffrey.add_inventory(Objects.Item(0, 'attack', 0, '../sprites/Item/Attack/Temp_Sword.png', False))
+    Jeffrey.add_inventory(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
+    Jeffrey.add_inventory(Objects.Item(0, ItemType.DEFENCE, 100, '../sprites/Item/Defence/Temp_Shield.png', False))
+    Jeffrey.add_inventory(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
     # Managers
     DungeonManager.init(Jeffrey)
     DungeonManager.add_rnd_room(10)
@@ -114,11 +114,11 @@ def run_game():
                     if selectedItem != -1:
                         slotPressed = check_change_item(attInvSlot, defInvSlot, pygame.mouse.get_pos())
 
-                        if slotPressed == ItemType.ATTACK and Jeffrey.get_inventory()[selectedItem].type == ItemType.ATTACK:
+                        if slotPressed == ItemType.ATTACK and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.ATTACK:
                             Jeffrey.set_attack_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
-                        elif slotPressed == ItemType.DEFENCE and Jeffrey.get_inventory()[selectedItem].type == ItemType.DEFENCE:
+                        elif slotPressed == ItemType.DEFENCE and Jeffrey.get_inventory()[selectedItem].itemType == ItemType.DEFENCE:
                             Jeffrey.set_def_item(selectedItem)
                             update_InvPos(Jeffrey, [attInvSlot, defInvSlot] + invSlots)
 
