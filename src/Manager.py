@@ -47,6 +47,7 @@ class DungeonManager:
     def advance_dungeon():
         for enemy in DungeonManager.currentRoom.enemies:
             enemy.visible = False
+
         DungeonManager.chestButton.visible = False
         DungeonManager.roomIndex += 1
 
@@ -59,6 +60,12 @@ class DungeonManager:
 
         DungeonManager.currentRoom = DungeonManager.roomList[DungeonManager.roomIndex]
         TurnManager.turnIndex = 0
+
+        if DungeonManager.currentRoom.hasTreasure:
+            DungeonManager.chestButton.visible = True
+
+        for enemy in DungeonManager.currentRoom.enemies:
+            enemy.visible = True
 
     @staticmethod
     def add_rnd_room(num: int):
@@ -243,7 +250,7 @@ class UI:
                 self.isRunning = False
 
             self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png')
-            self.__screen.draw.room(DungeonManager)
+            update_gameobjects(self.__screen)
             update_gameobjects(self.__screen)
             self.__screen.draw.rect(self.color, self.rect)
             self.__screen.draw.text(self.txt, self.rect, True, size=128)
