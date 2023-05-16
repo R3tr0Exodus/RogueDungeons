@@ -41,9 +41,9 @@ class WindowRenderer:
                 rect = txt.get_rect(center=(self.w/2, self.h/2))
             self.__screen.blit(txt, rect)
 
-        def background(self, spritePath: str, scale):
+        def background(self, spritePath: str):
             sprite = pygame.image.load(spritePath)
-            sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * scale, sprite.get_rect().height * scale))
+            sprite = pygame.transform.scale(sprite, (sprite.get_rect().width * GameObject.scale, sprite.get_rect().height * GameObject.scale))
 
             sprite_size = sprite.get_rect()
             blocks_x = ceil(self.w / sprite_size.w)

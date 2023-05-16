@@ -53,6 +53,7 @@ def start_main_menu():
         if keys[pygame.K_ESCAPE]:
             Manager.UI.MainMenu.isShowing = False
             pygame.quit()
+
     Manager.UI.MainMenu.hide()
 
 
@@ -60,19 +61,19 @@ def run_game():
     running = True
 
     # Entities
-    Jeffrey = Objects.Player("Jeffrey", 50, 10, center[0] - 15, center[1] + 5, Layers.ENTITIES)
-    Jeffrey.baseHealth = 250
-    Jeffrey.health = 250
+    Jeffrey = Objects.Player("Jeffrey", 250, 10, center[0] - 15, center[1] + 5, Layers.ENTITIES)
 
-    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
-    Jeffrey.add_item(Objects.Item(0, ItemType.DEFENCE, 100, '../sprites/Item/Defence/Temp_Shield.png', False))
-    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png', False))
+    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png'))
+    Jeffrey.add_item(Objects.Item(0, ItemType.DEFENCE, 100, '../sprites/Item/Defence/Temp_Shield.png'))
+    Jeffrey.add_item(Objects.Item(0, ItemType.ATTACK, 100, '../sprites/Item/Attack/Temp_Sword.png'))
+
     # Managers
     DungeonManager.init(Jeffrey)
     DungeonManager.add_rnd_room(10)
+
     TurnManager.init(Jeffrey, window)
 
-    # UI Elements
+    # Inventory UI Elements
     invBackground = Objects.GameObject(center[0] - 40, center[1] - 15, Layers.UI,
                                        '../sprites/UI/Inventroy_backdrop.png', False)
     attInvSlot = Objects.GameObject(center[0] - 20, center[1] - 28, Layers.UI, '../sprites/UI/Inventroy_tile_gold.png',
@@ -93,10 +94,10 @@ def run_game():
     attButton = Objects.UiButton(start_attack, center[0] - 45, Coords.RIGHT_BOTTOM[1] - 15, Layers.UI)
     nxtLvlButton = Objects.UiButton(continue_dungeon, center[0] - 7, Coords.RIGHT_TOP[1] + 3, Layers.UI)
 
-    selectedItem = 0
+    selectedItem = -1
     update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
     while running:
-        window.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
+        window.draw.background('../sprites/Misc/Cobble_Wall.png')
         window.draw.room(Manager.DungeonManager)
 
         TurnManager.draw_hp(Jeffrey, DungeonManager.currentRoom.enemies[0])

@@ -242,7 +242,7 @@ class UI:
             if self.index >= self.steps * 2:
                 self.isRunning = False
 
-            self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png', 10)
+            self.__screen.draw.background('../sprites/Misc/Cobble_Wall.png')
             self.__screen.draw.room(DungeonManager)
             update_gameobjects(self.__screen)
             self.__screen.draw.rect(self.color, self.rect)
