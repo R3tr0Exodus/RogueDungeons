@@ -182,7 +182,6 @@ class Player(Entity):
 
         # Update attack stat
         self.dmg = self.baseDmg + self.attackItem.power
-        print(f'{self.dmg=}')
 
     def set_def_item(self, index):
         self.__inventory.insert(index, self.defensiveItem)
@@ -190,7 +189,6 @@ class Player(Entity):
 
         # Update defence stat
         self.armor = self.defensiveItem.power
-        print(f'{self.armor=}')
 
 
 class UiButton(GameObject):

@@ -161,31 +161,32 @@ class TurnManager:
             TurnManager.next_turn()
 
     @staticmethod
+    def draw_bar(entity: GameObject.Entity, pos: tuple):
+        health_pct = entity.health / entity.baseHealth * (TurnManager.__barPixelLength - 2)
+        text = f"{entity.name}: {entity.health} / {entity.baseHealth}"
+
+        # bar
+        TurnManager.__screen.draw.sprite(TurnManager.__healthBarSprite,
+                                         pygame.Rect(pos[0], pos[1], TurnManager.__barPixelLength, 4))
+        text_rect = pygame.Rect(pos[0], pos[1] - 30, TurnManager.__barPixelLength, 4)
+        TurnManager.__screen.draw.text(text, text_rect)
+
+        # bar fill
+        TurnManager.__screen.draw.rect((255, 0, 0), pygame.Rect(pos[0] + TurnManager.__pixelSize,
+                                                                pos[1] + TurnManager.__pixelSize,
+                                                                health_pct * TurnManager.__pixelSize,
+                                                                2 * TurnManager.__pixelSize))
+
+    @staticmethod
     def draw_hp(player: GameObject.Player, enemy: GameObject.Entity):
-
-        def draw_bar(entity: GameObject.Entity, pos: tuple):
-            health_pct = entity.health / entity.baseHealth * (TurnManager.__barPixelLength-2)
-            text = f"{entity.name}: {entity.health} / {entity.baseHealth}"
-
-            # bar
-            TurnManager.__screen.draw.sprite(TurnManager.__healthBarSprite,
-                                             pygame.Rect(pos[0], pos[1], TurnManager.__barPixelLength, 4))
-            text_rect = pygame.Rect(pos[0], pos[1] - 30, TurnManager.__barPixelLength, 4)
-            TurnManager.__screen.draw.text(text, text_rect)
-
-            # bar fill
-            TurnManager.__screen.draw.rect((255, 0, 0), pygame.Rect(pos[0] + TurnManager.__pixelSize,
-                                                                    pos[1] + TurnManager.__pixelSize,
-                                                                    health_pct * TurnManager.__pixelSize,
-                                                                    2 * TurnManager.__pixelSize))
 
         left_pos = (Coords.LEFT_BOTTOM[0] * 10 + 100,
                     Coords.LEFT_BOTTOM[1] * 10 - 200)
         right_pos = (Coords.RIGHT_TOP[0] * 10 - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
                      Coords.RIGHT_TOP[1] * 10 + 4 + 100)
 
-        draw_bar(player, left_pos)
-        draw_bar(enemy, right_pos)
+        TurnManager.draw_bar(player, left_pos)
+        TurnManager.draw_bar(enemy, right_pos)
 
 
 class UI:
