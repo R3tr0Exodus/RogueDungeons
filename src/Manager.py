@@ -259,6 +259,3 @@ class UI:
             self.__screen.draw.rect(self.color, self.rect)
             self.__screen.draw.text(self.txt, self.rect, True, size=128)
             self.__screen.update()
-
-
-

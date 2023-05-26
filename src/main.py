@@ -114,6 +114,11 @@ def run_game():
                 if event.button == 1:
                     buttons = Objects.GameObject.buttonList
                     check_button_press(buttons, pygame.mouse.get_pos())
+
+                    # Don't change the inventory if the inventory is not open.
+                    if not Jeffrey.usingInv:
+                        continue
+
                     update_inv_pos(Jeffrey, attInvSlot, defInvSlot, invSlots)
 
                     if selectedItem != -1:
