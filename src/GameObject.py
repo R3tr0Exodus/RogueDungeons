@@ -6,7 +6,7 @@ class GameObject(object):
     instanceList = []  # keep track of all gameobjects
     buttonList = []  # Keep track of all buttons
 
-    def __init__(self, xPos, yPos, layer: int, spritePath: str, visible: bool = True):
+    def __init__(self, xPos: int, yPos: int, layer: int, spritePath: str, visible: bool = True):
         if spritePath is None:
             self._sprite = pygame.image.load('../sprites/Entity/Jerry_sprite.png')
         else:
