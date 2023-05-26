@@ -161,7 +161,18 @@ class TurnManager:
             TurnManager.next_turn()
 
     @staticmethod
-    def draw_bar(entity: GameObject.Entity, pos: tuple):
+    def draw_hp(player: GameObject.Player, enemy: GameObject.Entity):
+
+        left_pos = (Coords.LEFT_BOTTOM[0] * 10 + 100,
+                    Coords.LEFT_BOTTOM[1] * 10 - 200)
+        right_pos = (Coords.RIGHT_TOP[0] * 10 - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
+                     Coords.RIGHT_TOP[1] * 10 + 4 + 100)
+
+        TurnManager.__draw_bar(player, left_pos)
+        TurnManager.__draw_bar(enemy, right_pos)
+
+    @staticmethod
+    def __draw_bar(entity: GameObject.Entity, pos: tuple):
         health_pct = entity.health / entity.baseHealth * (TurnManager.__barPixelLength - 2)
         text = f"{entity.name}: {entity.health} / {entity.baseHealth}"
 
@@ -176,17 +187,6 @@ class TurnManager:
                                                                 pos[1] + TurnManager.__pixelSize,
                                                                 health_pct * TurnManager.__pixelSize,
                                                                 2 * TurnManager.__pixelSize))
-
-    @staticmethod
-    def draw_hp(player: GameObject.Player, enemy: GameObject.Entity):
-
-        left_pos = (Coords.LEFT_BOTTOM[0] * 10 + 100,
-                    Coords.LEFT_BOTTOM[1] * 10 - 200)
-        right_pos = (Coords.RIGHT_TOP[0] * 10 - TurnManager.__pixelSize * TurnManager.__barPixelLength - 100,
-                     Coords.RIGHT_TOP[1] * 10 + 4 + 100)
-
-        TurnManager.draw_bar(player, left_pos)
-        TurnManager.draw_bar(enemy, right_pos)
 
 
 class UI:
