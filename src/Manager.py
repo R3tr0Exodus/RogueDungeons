@@ -100,10 +100,13 @@ class DungeonManager:
 
     @staticmethod
     def loot():
-        loot = [LootTables.common, LootTables.epic, LootTables.legendary, LootTables.ascended]
-        rarity = random.choice(loot)
-        DungeonManager.player.add_item(copy.copy(random.choice(rarity)))
-        DungeonManager.chestButton.visible = False
+        if DungeonManager.currentRoom.isCleared:
+            loot = [LootTables.common, LootTables.epic, LootTables.legendary, LootTables.ascended]
+            rarity = random.choice(loot)
+            DungeonManager.player.add_item(copy.copy(random.choice(rarity)))
+            DungeonManager.chestButton.visible = False
+        else:
+            print(f"Room {DungeonManager.roomIndex+1} not cleared!")
 
 
 class TurnManager:
